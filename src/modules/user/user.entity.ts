@@ -4,7 +4,7 @@ import { AbstractEntity } from '../../common/abstract.entity.ts';
 import { RoleType } from '../../common/constants/role-type.ts';
 import { UseDto } from '../../common/decorators/use-dto.decorator.ts';
 import { PostEntity } from '../post/post.entity.ts';
-import { SessionEntity } from '../session/session.entity.ts';
+import { SessionEntity } from '../session/feature/session.entity.ts';
 import type { UserDtoOptions } from './dtos/user.dto.ts';
 import { UserDto } from './dtos/user.dto.ts';
 import { UserSettingsEntity } from './user-settings.entity.ts';

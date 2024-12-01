@@ -4,7 +4,7 @@ import {
   PhoneFieldOptional,
   StringField,
 } from '../../../common/decorators/field.decorators.ts';
-import { IsUnique } from '../../../shared/request/validations/request.unique.validation.ts';
+import { IsUnique } from '../../../shared/request/validations/request-unique.validation.ts';
 import { UserEntity } from '../../user/user.entity.ts';
 
 export class AuthRegisterLoginDto {

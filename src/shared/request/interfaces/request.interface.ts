@@ -1,3 +1,4 @@
+/* eslint-disable sonarjs/no-useless-intersection */
 import type { Request } from 'express'; // Ensure ReqId is imported
 
 import type { ApiKeyPayloadDto } from '../../../modules/api-key/dtos/api-key-payload.dto.ts';

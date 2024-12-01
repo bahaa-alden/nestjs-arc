@@ -3,7 +3,7 @@ import { IsNotEmpty } from 'class-validator';
 
 import { DateField } from '../../../../common/decorators/field.decorators.ts';
 import { DateGreaterThanEqual } from '../../../../shared/request/validations/request-date-greater-than.validation.ts';
-import { GreaterThanEqualOtherProperty } from '../../../../shared/request/validations/request.greater-than-other-property.validation.ts';
+import { GreaterThanEqualOtherProperty } from '../../../../shared/request/validations/request-greater-than-other-property.validation.ts';
 
 export class ApiKeyUpdateDateRequestDto {
   @DateField({

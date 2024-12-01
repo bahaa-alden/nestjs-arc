@@ -1,36 +1,36 @@
 import { Injectable } from '@nestjs/common';
 
 import { UserDto } from '../user/dtos/user.dto.ts';
-import { Session } from './domain/session.ts';
-import { SessionRepository } from './infrastructure/persistence/session.repository.ts';
+import { SessionDto } from './dtos/session.dto.ts';
+import { SessionRepository } from './interfaces/session.repository.ts';
 
 @Injectable()
 export class SessionService {
   constructor(private readonly sessionRepository: SessionRepository) {}
 
-  findById(id: Session['id']): Promise<Session | null> {
+  findById(id: SessionDto['id']): Promise<SessionDto | null> {
     return this.sessionRepository.findById(id);
   }
 
   create(
     data: Omit<
-      Session,
+      SessionDto,
       'id' | 'userId' | 'createdAt' | 'updatedAt' | 'deletedAt'
     >,
-  ): Promise<Session> {
+  ): Promise<SessionDto> {
     return this.sessionRepository.create(data);
   }
 
   update(
-    id: Session['id'],
+    id: SessionDto['id'],
     payload: Partial<
-      Omit<Session, 'id' | 'createdAt' | 'updatedAt' | 'deletedAt'>
+      Omit<SessionDto, 'id' | 'createdAt' | 'updatedAt' | 'deletedAt'>
     >,
-  ): Promise<Session | null> {
+  ): Promise<SessionDto | null> {
     return this.sessionRepository.update(id, payload);
   }
 
-  deleteById(id: Session['id']): Promise<void> {
+  deleteById(id: SessionDto['id']): Promise<void> {
     return this.sessionRepository.deleteById(id);
   }
 
@@ -40,7 +40,7 @@ export class SessionService {
 
   deleteByUserIdWithExclude(conditions: {
     userId: UserDto['id'];
-    excludeSessionId: Session['id'];
+    excludeSessionId: SessionDto['id'];
   }): Promise<void> {
     return this.sessionRepository.deleteByUserIdWithExclude(conditions);
   }

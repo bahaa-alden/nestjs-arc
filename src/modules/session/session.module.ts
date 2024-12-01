@@ -1,13 +1,11 @@
 import { Module } from '@nestjs/common';
 
-import { DocumentSessionPersistenceModule } from './infrastructure/persistence/document/document-persistence.module.ts';
+import { SessionFeatureModule } from './feature/feature.module.ts';
 import { SessionService } from './session.service.ts';
 
-const infrastructurePersistenceModule = DocumentSessionPersistenceModule;
-
 @Module({
-  imports: [infrastructurePersistenceModule],
+  imports: [SessionFeatureModule],
   providers: [SessionService],
-  exports: [SessionService, infrastructurePersistenceModule],
+  exports: [SessionService, SessionFeatureModule],
 })
 export class SessionModule {}

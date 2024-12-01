@@ -1,8 +1,8 @@
-import type { Session } from '../../../session/domain/session';
+import type { SessionDto } from '../../../session/dtos/session.dto';
 
 export interface IJwtRefreshPayloadType {
-  sessionId: Session['id'];
-  hash: Session['hash'];
+  sessionId: SessionDto['id'];
+  hash: SessionDto['hash'];
   iat: number;
   exp: number;
 }

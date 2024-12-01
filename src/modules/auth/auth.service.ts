@@ -18,7 +18,7 @@ import { HelperHashService } from '../../shared/helper/services/helper-hash.serv
 import { MailService } from '../../shared/mail/mail.service.ts';
 import { ApiConfigService } from '../../shared/services/api-config.service.ts';
 import { Reference } from '../../types.ts';
-import { Session } from '../session/domain/session.ts';
+import { SessionDto } from '../session/dtos/session.dto.ts';
 import { SessionService } from '../session/session.service.ts';
 import { CreateSettingsDto } from '../user/dtos/create-settings.dto.ts';
 import { UserDto } from '../user/dtos/user.dto.ts';
@@ -411,8 +411,8 @@ export class AuthService {
   private async getTokensData(data: {
     id: UserDto['id'];
     role: UserDto['role'];
-    sessionId: Session['id'];
-    hash: Session['hash'];
+    sessionId: SessionDto['id'];
+    hash: SessionDto['hash'];
   }) {
     const tokenExpiresIn = this.config.authConfig.jwtExpirationTime;
     const tokenExpires = Date.now() + ms(tokenExpiresIn);

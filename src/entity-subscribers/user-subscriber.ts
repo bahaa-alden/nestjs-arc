@@ -5,9 +5,8 @@ import type {
 } from 'typeorm';
 import { EventSubscriber } from 'typeorm';
 
-import { UserEntity } from '../../modules/user/user.entity.ts';
-import { HelperHashService } from '../../shared/helper/services/helper-hash.service.ts';
-
+import { UserEntity } from '../modules/user/user.entity.ts';
+import { HelperHashService } from '../shared/helper/services/helper-hash.service.ts';
 @EventSubscriber()
 export class UserSubscriber implements EntitySubscriberInterface<UserEntity> {
   constructor(private helperService: HelperHashService) {}

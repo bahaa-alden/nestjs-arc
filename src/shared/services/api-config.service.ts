@@ -7,7 +7,7 @@ import type { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { default as parse } from 'parse-duration';
 
 import { AppEnv } from '../../common/constants/app.enum.ts';
-import { UserSubscriber } from '../../database/entity-subscribers/user-subscriber.ts';
+import { UserSubscriber } from '../../entity-subscribers/user-subscriber.ts';
 import { SnakeNamingStrategy } from '../../snake-naming.strategy.ts';
 
 @Injectable()
