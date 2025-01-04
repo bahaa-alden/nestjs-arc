@@ -1,5 +1,5 @@
 {
-  "name": "nest-arc",
+  "name": "nestjs-arc",
   "version": "10.0.1",
   "description": "Nest Arc, Typescript, Postgres, TypeORM",
   "author": "Bahaa Alden <bahaaaldenabdo@gmail.com>",

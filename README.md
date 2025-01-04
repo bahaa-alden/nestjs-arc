@@ -8,10 +8,10 @@
 
 ```bash
 # 1. Clone the repository or click on "Use this template" button.
-git clone https://github.com/bahaa-alden/nest-arc.git
+git clone https://github.com/bahaa-alden/nestjs-arc.git
 
 # 2. Enter your newly-cloned folder.
-cd nest-arc
+cd nestjs-arc
 
 # 3. Create Environment variables file.
 cp .env.example .env
@@ -152,9 +152,9 @@ And you will see the generated file in `dist` that is ready to be served.
 
 This project includes a `docs` folder with more details on:
 
-1.  [Setup and development](https://bahaa-alden.github.io/nest-arc/docs/development.html#first-time-setup)
-1.  [Architecture](https://bahaa-alden.github.io/nest-arc/docs/architecture.html)
-1.  [Naming Cheatsheet](https://bahaa-alden.github.io/nest-arc/docs/naming-cheatsheet.html)
+1.  [Setup and development](https://bahaa-alden.github.io/nestjs-arc/docs/development.html#first-time-setup)
+1.  [Architecture](https://bahaa-alden.github.io/nestjs-arc/docs/architecture.html)
+1.  [Naming Cheatsheet](https://bahaa-alden.github.io/nestjs-arc/docs/naming-cheatsheet.html)
 
 ## Community
 
