@@ -1,0 +1,14 @@
+{
+  "extends": "./tsconfig.json",
+  "include": [
+    "src/**/*",
+    "bundle.ts",
+    "*.{ts,js,mts}",
+    "test/**/*"
+  ],
+  "exclude": [
+    ".vuepress/**/*",
+    "node_modules/**/*",
+    "dist/**/*",
+  ]
+}
