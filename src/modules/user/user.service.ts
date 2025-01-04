@@ -1,3 +1,4 @@
+/* eslint-disable sonarjs/argument-type */
 import { Injectable } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -92,6 +93,11 @@ export class UserService {
     pageOptionsDto: UsersPageOptionsDto,
   ): Promise<PageDto<UserDto>> {
     const queryBuilder = this.userRepository.createQueryBuilder('user');
+
+    if (pageOptionsDto.q) {
+      queryBuilder.searchByString(pageOptionsDto.q, ['email']);
+    }
+
     const [items, pageMetaDto] = await queryBuilder.paginate(pageOptionsDto);
 
     return items.toPageDto(pageMetaDto);

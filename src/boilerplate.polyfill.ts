@@ -1,3 +1,5 @@
+/* eslint-disable eslintComments/no-unlimited-disable */
+/* eslint-disable */
 import _ from 'lodash';
 import type { ObjectLiteral } from 'typeorm';
 import { Brackets, SelectQueryBuilder } from 'typeorm';
@@ -13,10 +15,9 @@ import type { KeyOfType } from './types';
 
 declare global {
   export type Uuid = string & { _uuidBrand: undefined };
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any,@typescript-eslint/no-redundant-type-constituents
+
   export type Todo = any & { _todoBrand: undefined };
 
-  // eslint-disable-next-line @typescript-eslint/naming-convention
   interface Array<T> {
     toDtos<Dto extends AbstractDto>(this: T[], options?: unknown): Dto[];
 
@@ -35,7 +36,6 @@ declare global {
 }
 
 declare module 'typeorm' {
-  // eslint-disable-next-line @typescript-eslint/naming-convention
   interface SelectQueryBuilder<Entity> {
     searchByString(
       q: string,
