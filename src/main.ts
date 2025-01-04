@@ -60,6 +60,8 @@ export async function bootstrap(): Promise<NestExpressApplication> {
       options: {
         url: `nats://${natsConfig.host}:${natsConfig.port}`,
         queue: 'main_service',
+        retryAttempts: 5,
+        retryDelay: 3000,
       },
     });
 

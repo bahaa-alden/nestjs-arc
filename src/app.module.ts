@@ -24,6 +24,7 @@ import { UserModule } from './modules/user/user.module.ts';
 import { ApiConfigService } from './shared/services/api-config.service.ts';
 import { SharedModule } from './shared/shared.module.ts';
 
+console.log(path.join(import.meta.dirname, 'i18n/'));
 @Module({
   imports: [
     AuthModule,
@@ -66,7 +67,7 @@ import { SharedModule } from './shared/shared.module.ts';
       useFactory: (configService: ApiConfigService) => ({
         fallbackLanguage: configService.fallbackLanguage,
         loaderOptions: {
-          path: path.join(import.meta.dirname, 'i18n/'),
+          path: path.join(import.meta.dirname, 'i18n', 'i18n'),
           watch: configService.isDevelopment,
         },
       }),

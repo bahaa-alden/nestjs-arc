@@ -38,7 +38,6 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
 
-    console.log(exception);
     exception =
       exception.code === '23505'
         ? handelDuplicatedRecords(exception.detail)
