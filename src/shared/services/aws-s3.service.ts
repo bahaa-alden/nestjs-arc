@@ -1,4 +1,5 @@
 import { S3 } from '@aws-sdk/client-s3';
+import { createPresignedPost } from '@aws-sdk/s3-presigned-post';
 import { Injectable } from '@nestjs/common';
 import mime from 'mime-types';
 
@@ -39,5 +40,19 @@ export class AwsS3Service {
     });
 
     return key;
+  }
+
+  async getSignedUrl(key: string, expiration = 3600) {
+    const signedUrl = await createPresignedPost(this.s3, {
+      Bucket: this.configService.awsS3Config.bucketName,
+      Key: key,
+      Expires: expiration,
+      Conditions: [['content-length-range', 0, 10_000_000]],
+      Fields: {
+        key,
+      },
+    });
+
+    return signedUrl;
   }
 }
