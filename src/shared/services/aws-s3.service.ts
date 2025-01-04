@@ -34,7 +34,7 @@ export class AwsS3Service {
     await this.s3.putObject({
       Bucket: this.configService.awsS3Config.bucketName,
       Body: file.buffer,
-      ACL: 'public-read',
+      // ACL: 'public-read',
       Key: key,
     });
 

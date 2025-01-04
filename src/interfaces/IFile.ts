@@ -1,5 +1,3 @@
-import type { Buffer } from 'node:buffer';
-
 export interface IFile {
   encoding: string;
   buffer: Buffer;

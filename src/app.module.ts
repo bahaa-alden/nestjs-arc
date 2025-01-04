@@ -1,5 +1,8 @@
-import './boilerplate.polyfill.ts';
+// eslint-disable-next-line importPlugin/extensions
+import './boilerplate.polyfill';
+
 import path from 'node:path';
+
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { ThrottlerModule } from '@nestjs/throttler';
@@ -13,13 +16,13 @@ import {
 } from 'nestjs-i18n';
 import { DataSource } from 'typeorm';
 import { addTransactionalDataSource } from 'typeorm-transactional';
+
 import { AuthModule } from './modules/auth/auth.module.ts';
 import { HealthCheckerModule } from './modules/health-checker/health-checker.module.ts';
 import { PostModule } from './modules/post/post.module.ts';
 import { UserModule } from './modules/user/user.module.ts';
 import { ApiConfigService } from './shared/services/api-config.service.ts';
 import { SharedModule } from './shared/shared.module.ts';
-import { CarModule } from './modules/cars/car.module';
 
 @Module({
   imports: [
@@ -76,7 +79,6 @@ import { CarModule } from './modules/cars/car.module';
       inject: [ApiConfigService],
     }),
     HealthCheckerModule,
-    CarModule,
   ],
   providers: [],
 })

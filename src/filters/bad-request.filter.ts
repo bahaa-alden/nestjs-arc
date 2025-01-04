@@ -1,55 +1,67 @@
-import type { ArgumentsHost, ExceptionFilter } from '@nestjs/common';
-import { Catch, UnprocessableEntityException } from '@nestjs/common';
-import { Reflector } from '@nestjs/core';
-import type { ValidationError } from 'class-validator';
-import type { Response } from 'express';
-import _ from 'lodash';
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable sonarjs/no-nested-conditional */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import {
+  ArgumentsHost,
+  Catch,
+  ConflictException,
+  ExceptionFilter,
+  HttpException,
+  InternalServerErrorException,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
+import { HttpAdapterHost } from '@nestjs/core';
+import { Response } from 'express';
 
-@Catch(UnprocessableEntityException)
-export class HttpExceptionFilter
-  implements ExceptionFilter<UnprocessableEntityException>
-{
-  constructor(public reflector: Reflector) {}
+import { ErrorType } from '../constants/error-type.enum.ts';
 
-  catch(exception: UnprocessableEntityException, host: ArgumentsHost): void {
+const handelPassportError = () =>
+  new UnauthorizedException({ message: 'الرجاء تسجيل الدخول' });
+
+const handelDuplicatedRecords = (detail: string) => {
+  const match = /Key \("(.+)", "(.+)"\)/.exec(detail);
+
+  return new ConflictException(
+    `Record already exist on table(s): ${match![1]}, ${match![2]}`,
+  );
+};
+
+@Catch()
+export class HttpExceptionFilter implements ExceptionFilter {
+  constructor(private readonly httpAdapterHost: HttpAdapterHost) {}
+
+  catch(exception: any, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
-    const statusCode = exception.getStatus();
-    const r = exception.getResponse() as { message: ValidationError[] };
 
-    const validationErrors = r.message;
-    this.validationFilter(validationErrors);
+    console.log(exception);
+    exception =
+      exception.code === '23505'
+        ? handelDuplicatedRecords(exception.detail)
+        : exception.code === '23503'
+          ? new NotFoundException(`${exception.detail} not found`)
+          : exception instanceof HttpException
+            ? exception
+            : new InternalServerErrorException('something went very wrong');
 
-    response.status(statusCode).json(r);
+    if (exception.message === 'Unauthorized') {
+      exception = handelPassportError();
+    }
+
+    const rep = {
+      type: exception.response.errors ? ErrorType.Form : ErrorType.Default,
+      message: exception.response.errors ? undefined : exception.message,
+      errors: exception.response.errors,
+    };
+    this.reply(response, rep, exception.getStatus());
   }
 
-  private validationFilter(validationErrors: ValidationError[]): void {
-    for (const validationError of validationErrors) {
-      const children = validationError.children;
-
-      if (children && !_.isEmpty(children)) {
-        this.validationFilter(children);
-
-        return;
-      }
-
-      delete validationError.children;
-
-      const constraints = validationError.constraints;
-
-      if (!constraints) {
-        return;
-      }
-
-      for (const [constraintKey, constraint] of Object.entries(constraints)) {
-        // convert default messages
-        if (!constraint) {
-          // convert error message to error.fields.{key} syntax for i18n translation
-          constraints[constraintKey] = `error.fields.${_.snakeCase(
-            constraintKey,
-          )}`;
-        }
-      }
-    }
+  reply(response: Response, rep: any, status: number) {
+    const { httpAdapter } = this.httpAdapterHost;
+    httpAdapter.reply(response, rep, status);
   }
 }

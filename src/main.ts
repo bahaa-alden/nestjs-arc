@@ -1,10 +1,5 @@
-import {
-  ClassSerializerInterceptor,
-  HttpStatus,
-  UnprocessableEntityException,
-  ValidationPipe,
-} from '@nestjs/common';
-import { NestFactory, Reflector } from '@nestjs/core';
+import { ClassSerializerInterceptor } from '@nestjs/common';
+import { HttpAdapterHost, NestFactory, Reflector } from '@nestjs/core';
 import { Transport } from '@nestjs/microservices';
 import type { NestExpressApplication } from '@nestjs/platform-express';
 import { ExpressAdapter } from '@nestjs/platform-express';
@@ -17,6 +12,7 @@ import { AppModule } from './app.module.ts';
 import { HttpExceptionFilter } from './filters/bad-request.filter.ts';
 import { QueryFailedFilter } from './filters/query-failed.filter.ts';
 import { TranslationInterceptor } from './interceptors/translation-interceptor.service.ts';
+import { MainValidationPipe } from './pipes/main-validation.pipe.ts';
 import { setupSwagger } from './setup-swagger.ts';
 import { ApiConfigService } from './shared/services/api-config.service.ts';
 import { TranslationService } from './shared/services/translation.service.ts';
@@ -38,8 +34,10 @@ export async function bootstrap(): Promise<NestExpressApplication> {
 
   const reflector = app.get(Reflector);
 
+  const httpAdapter = app.get(HttpAdapterHost);
+
   app.useGlobalFilters(
-    new HttpExceptionFilter(reflector),
+    new HttpExceptionFilter(httpAdapter),
     new QueryFailedFilter(reflector),
   );
 
@@ -50,15 +48,7 @@ export async function bootstrap(): Promise<NestExpressApplication> {
     ),
   );
 
-  app.useGlobalPipes(
-    new ValidationPipe({
-      whitelist: true,
-      errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
-      transform: true,
-      dismissDefaultMessages: true,
-      exceptionFactory: (errors) => new UnprocessableEntityException(errors),
-    }),
-  );
+  app.useGlobalPipes(new MainValidationPipe());
 
   const configService = app.select(SharedModule).get(ApiConfigService);
 
