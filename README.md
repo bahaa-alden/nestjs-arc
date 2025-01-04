@@ -1,4 +1,4 @@
-# Awesome NestJS Boilerplate v10
+# NestJS Boilerplate
 
 [![Awesome NestJS](https://img.shields.io/badge/Awesome-NestJS-blue.svg?longCache=true&style=flat-square)](https://github.com/juliandavidmr/awesome-nestjs)
 
@@ -160,4 +160,4 @@ This project includes a `docs` folder with more details on:
 
 For help, discussion about best practices, or any other conversation that would benefit from being searchable:
 
-[Discuss Awesome NestJS Boilerplate on GitHub](https://github.com/bahaa-alden/nestjs-arc/discussions)
+[Discuss NestJS Boilerplate on GitHub](https://github.com/bahaa-alden/nestjs-arc/discussions)
