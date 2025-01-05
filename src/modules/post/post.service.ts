@@ -45,7 +45,9 @@ export class PostService {
       .createQueryBuilder('post')
       .where('post.id = :id', { id });
 
-    const postEntity = await queryBuilder.getOne();
+    const postEntity = await queryBuilder
+      .leftJoinAndSelect('post.translations', 'translations')
+      .getOne();
 
     if (!postEntity) {
       throw new PostNotFoundException();

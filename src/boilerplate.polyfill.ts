@@ -27,7 +27,6 @@ declare global {
     ): string;
 
     toPageDto<Dto extends AbstractDto>(
-      this: T[],
       pageMetaDto: PageMetaDto,
       // FIXME make option type visible from entity
       options?: unknown,

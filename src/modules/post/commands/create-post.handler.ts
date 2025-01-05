@@ -23,10 +23,9 @@ export class CreatePostHandler
   async execute(command: CreatePostCommand) {
     const { userId, createPostDto } = command;
     const postEntity = this.postRepository.create({ userId });
-    const translations = this.createTranslations(createPostDto, postEntity.id);
-
     await this.postRepository.save(postEntity);
 
+    const translations = this.createTranslations(createPostDto, postEntity.id);
     await this.postTranslationRepository.save(translations);
 
     postEntity.translations = translations;

@@ -64,8 +64,8 @@ export class PostController {
   @Auth([])
   @HttpCode(HttpStatus.OK)
   @ApiOkResponse({ type: PostDto })
-  async getSinglePost(@UUIDParam('id') id: Uuid): Promise<PostDto> {
-    const entity = await this.postService.getSinglePost(id);
+  async getSinglePost(@UUIDParam('id') id: string): Promise<PostDto> {
+    const entity = await this.postService.getSinglePost(id as Uuid);
 
     return entity.toDto();
   }
@@ -74,16 +74,16 @@ export class PostController {
   @HttpCode(HttpStatus.ACCEPTED)
   @ApiAcceptedResponse()
   updatePost(
-    @UUIDParam('id') id: Uuid,
+    @UUIDParam('id') id: string,
     @Body() updatePostDto: UpdatePostDto,
   ): Promise<void> {
-    return this.postService.updatePost(id, updatePostDto);
+    return this.postService.updatePost(id as Uuid, updatePostDto);
   }
 
   @Delete(':id')
   @HttpCode(HttpStatus.ACCEPTED)
   @ApiAcceptedResponse()
-  async deletePost(@UUIDParam('id') id: Uuid): Promise<void> {
-    await this.postService.deletePost(id);
+  async deletePost(@UUIDParam('id') id: string): Promise<void> {
+    await this.postService.deletePost(id as Uuid);
   }
 }
