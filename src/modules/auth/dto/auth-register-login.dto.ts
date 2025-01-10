@@ -5,7 +5,7 @@ import {
   StringField,
 } from '../../../decorators/field.decorators.ts';
 
-export class UserRegisterDto {
+export class AuthRegisterLoginDto {
   @StringField()
   readonly firstName!: string;
 

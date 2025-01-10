@@ -6,6 +6,7 @@
 import {
   Column,
   CreateDateColumn,
+  DeleteDateColumn,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -40,6 +41,12 @@ export abstract class AbstractEntity<
     type: 'timestamp',
   })
   updatedAt!: Date;
+
+  @DeleteDateColumn({
+    type: 'timestamp',
+    nullable: true,
+  })
+  deletedAt!: Date | null;
 
   translations?: AbstractTranslationEntity[];
 

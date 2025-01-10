@@ -138,15 +138,39 @@ export class ApiConfigService {
 
   get authConfig() {
     return {
-      privateKey: this.getString('JWT_PRIVATE_KEY'),
-      publicKey: this.getString('JWT_PUBLIC_KEY'),
-      jwtExpirationTime: this.getNumber('JWT_EXPIRATION_TIME'),
+      authSecret: this.getString('JWT_AUTH_SECRET'),
+      jwtExpirationTime: this.getString('JWT_AUTH_EXPIRES'),
+      refreshSecret: this.getString('JWT_REFRESH_SECRET'),
+      refreshExpires: this.getString('JWT_REFRESH_EXPIRES'),
+      confirmEmailSecret: this.getString('JWT_CONFIRM_EMAIL_SECRET'),
+      confirmEmailExpires: this.getString('JWT_CONFIRM_EMAIL_EXPIRES'),
+      forgotSecret: this.getString('JWT_FORGOT_SECRET'),
+      forgetExpires: this.getString('JWT_FORGOT_EXPIRES'),
+    };
+  }
+
+  get mailConfig() {
+    return {
+      host: this.getString('MAIL_HOST'),
+      port: this.getNumber('MAIL_PORT'),
+      ignoreTLS: this.getBoolean('MAIL_IGNORE_TLS'),
+      secure: this.getBoolean('MAIL_SECURE'),
+      requireTLS: this.getBoolean('MAIL_REQUIRE_TLS'),
+      auth: {
+        user: this.getString('MAIL_USER'),
+        pass: this.getString('MAIL_PASSWORD'),
+      },
+      defaultName: this.getString('MAIL_DEFAULT_NAME'),
+      defaultEmail: this.getString('MAIL_DEFAULT_EMAIL'),
     };
   }
 
   get appConfig() {
     return {
+      name: this.getString('APP_NAME'),
       port: this.getString('PORT'),
+      frontendDomain: this.getString('FRONEND_DOMAIN'),
+      workingDirectory: process.env.PWD ?? process.cwd(),
     };
   }
 

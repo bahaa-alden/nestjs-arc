@@ -1,10 +1,10 @@
-/* eslint-disable sonarjs/argument-type */
 import { Injectable } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
 import { plainToClass } from 'class-transformer';
 import type { FindOptionsWhere } from 'typeorm';
 import { Repository } from 'typeorm';
+import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import { Transactional } from 'typeorm-transactional';
 
 import type { PageDto } from '../../common/dto/page.dto.ts';
@@ -14,8 +14,9 @@ import type { IFile } from '../../interfaces/IFile.ts';
 import { AwsS3Service } from '../../shared/services/aws-s3.service.ts';
 import { ValidatorService } from '../../shared/services/validator.service.ts';
 import type { Reference } from '../../types.ts';
-import { UserRegisterDto } from '../auth/dto/user-register.dto.ts';
+import { AuthRegisterLoginDto } from '../auth/dto/auth-register-login.dto.ts';
 import { CreateSettingsCommand } from './commands/create-settings.command.ts';
+import { UpdateSettingsCommand } from './commands/update-settings.command.ts';
 import { CreateSettingsDto } from './dtos/create-settings.dto.ts';
 import type { UserDto } from './dtos/user.dto.ts';
 import type { UsersPageOptionsDto } from './dtos/users-page-options.dto.ts';
@@ -63,7 +64,7 @@ export class UserService {
 
   @Transactional()
   async createUser(
-    userRegisterDto: UserRegisterDto,
+    userRegisterDto: AuthRegisterLoginDto,
     file?: Reference<IFile>,
   ): Promise<UserEntity> {
     const user = this.userRepository.create(userRegisterDto);
@@ -117,6 +118,15 @@ export class UserService {
     return userEntity.toDto();
   }
 
+  async update(
+    id: Uuid,
+    dto?: QueryDeepPartialEntity<UserEntity>,
+  ): Promise<UserDto> {
+    await this.userRepository.update({ id }, { ...dto });
+
+    return this.getUser(id);
+  }
+
   createSettings(
     userId: Uuid,
     createSettingsDto: CreateSettingsDto,
@@ -124,5 +134,20 @@ export class UserService {
     return this.commandBus.execute<CreateSettingsCommand, UserSettingsEntity>(
       new CreateSettingsCommand(userId, createSettingsDto),
     );
+  }
+
+  updateSettings(
+    userId: Uuid,
+    updateSettingsDto: CreateSettingsDto,
+  ): Promise<UserSettingsEntity> {
+    return this.commandBus.execute<UpdateSettingsCommand, UserSettingsEntity>(
+      new UpdateSettingsCommand(userId, updateSettingsDto),
+    );
+  }
+
+  async softDelete(id: Uuid): Promise<void> {
+    const user = await this.getUser(id);
+
+    await this.userRepository.softRemove({ id: user.id });
   }
 }

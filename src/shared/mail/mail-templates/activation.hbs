@@ -1,0 +1,48 @@
+<html lang='en'>
+
+  <head>
+    <meta charset='UTF-8' />
+    <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+    <title>{{title}}</title>
+    <style>
+      body { margin: 0; font-family: 'Arial', sans-serif; background-color:
+      #f4f4f4; } .email-container { max-width: 600px; margin: 0 auto;
+      background-color: #ffffff; border-radius: 10px; overflow: hidden;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); } .header { background:
+      linear-gradient(135deg, #00838f, #00acc1); padding: 40px 20px; text-align:
+      center; color: #ffffff; } .header h1 { margin: 0; font-size: 36px;
+      font-weight: 600; } .content { padding: 30px 20px; color: #555555;
+      font-size: 16px; line-height: 1.6; } .content p { margin: 0 0 20px; }
+      .button-container { text-align: center; padding: 20px 0; } .button {
+      display: inline-block; padding: 15px 30px; background-color: #00838f;
+      color: #ffffff; text-decoration: none; border-radius: 5px; font-size:
+      16px; font-weight: 600; transition: background-color 0.3s ease; }
+      .button:hover { background-color: #00695c; } .footer { text-align: center;
+      padding: 20px; font-size: 14px; color: #999999; background-color: #f9f9f9;
+      } .footer a { color: #00838f; text-decoration: none; } .footer a:hover {
+      text-decoration: underline; }
+    </style>
+  </head>
+
+  <body>
+    <div class='email-container'>
+      <div class='header'>
+        <h1>{{app_name}}</h1>
+      </div>
+      <div class='content'>
+        <p>{{text1}}</p>
+        <p>{{text2}} {{app_name}}.</p>
+        <p>{{text3}}</p>
+      </div>
+      <div class='button-container'>
+        <a href='{{url}}' class='button'>{{actionTitle}}</a>
+      </div>
+      <div class='footer'>
+        <p>If you have any questions, feel free to
+          <a href='mailto:support@example.com'>contact us</a>.</p>
+        <p>&copy; {{year}} {{app_name}}. All rights reserved.</p>
+      </div>
+    </div>
+  </body>
+
+</html>
