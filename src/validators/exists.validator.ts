@@ -1,31 +1,29 @@
-import { InjectDataSource } from '@nestjs/typeorm';
+import { Injectable } from '@nestjs/common';
 import type {
   ValidationArguments,
   ValidationOptions,
   ValidatorConstraintInterface,
 } from 'class-validator';
 import { registerDecorator, ValidatorConstraint } from 'class-validator';
-import type { EntitySchema, FindOptionsWhere, ObjectType } from 'typeorm';
+import type { EntityTarget, ObjectLiteral } from 'typeorm';
 import { DataSource } from 'typeorm';
 
-/**
- * @deprecated Don't use this validator until it's fixed in NestJS
- */
-@ValidatorConstraint({ name: 'exists', async: true })
-export class ExistsValidator implements ValidatorConstraintInterface {
-  constructor(@InjectDataSource() private readonly dataSource: DataSource) {}
+@ValidatorConstraint({ name: 'isExist', async: true })
+@Injectable()
+export class IsExistConstraint implements ValidatorConstraintInterface {
+  constructor(private dataSource: DataSource) {}
 
-  public async validate<E>(
-    _value: string,
-    args: IExistsValidationArguments<E>,
-  ): Promise<boolean> {
-    const [entityClass, findCondition] = args.constraints;
+  async validate(value: string, args: ValidationArguments) {
+    const [entityClass] = args.constraints as [EntityTarget<ObjectLiteral>];
 
-    return (
-      (await this.dataSource.getRepository(entityClass).count({
-        where: findCondition(args),
-      })) > 0
-    );
+    const entity = await this.dataSource.getRepository(entityClass).findOne({
+      where: {
+        [args.property]: value,
+      },
+      withDeleted: true,
+    });
+
+    return entity ? true : false;
   }
 
   defaultMessage(args: ValidationArguments): string {
@@ -34,29 +32,21 @@ export class ExistsValidator implements ValidatorConstraintInterface {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access
     const entity = entityClass.name ?? 'Entity';
 
-    return `The selected ${args.property}  does not exist in ${entity} entity`;
+    return `the selected ${args.property}  does not exist in ${entity} entity`;
   }
 }
 
-type ExistsValidationConstraints<E> = [
-  ObjectType<E> | EntitySchema<E> | string,
-  (validationArguments: ValidationArguments) => FindOptionsWhere<E>,
-];
-interface IExistsValidationArguments<E> extends ValidationArguments {
-  constraints: ExistsValidationConstraints<E>;
-}
-
-export function Exists<E>(
-  constraints: Partial<ExistsValidationConstraints<E>>,
+export function IsExist<E>(
+  entity: EntityTarget<E>,
   validationOptions?: ValidationOptions,
 ): PropertyDecorator {
-  return (object, propertyName: string | symbol) => {
+  return function (object: object, propertyName: string) {
     registerDecorator({
       target: object.constructor,
-      propertyName: propertyName as string,
+      propertyName,
       options: validationOptions,
-      constraints,
-      validator: ExistsValidator,
+      constraints: [entity],
+      validator: IsExistConstraint,
     });
-  };
+  } as PropertyDecorator;
 }

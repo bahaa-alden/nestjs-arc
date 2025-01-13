@@ -1,31 +1,30 @@
-import { InjectDataSource } from '@nestjs/typeorm';
+import { Injectable } from '@nestjs/common';
 import type {
   ValidationArguments,
   ValidationOptions,
   ValidatorConstraintInterface,
 } from 'class-validator';
 import { registerDecorator, ValidatorConstraint } from 'class-validator';
-import type { EntitySchema, FindOptionsWhere, ObjectType } from 'typeorm';
+import type { EntityTarget } from 'typeorm';
 import { DataSource } from 'typeorm';
 
-/**
- * @deprecated Don't use this validator until it's fixed in NestJS
- */
-@ValidatorConstraint({ name: 'unique', async: true })
-export class UniqueValidator implements ValidatorConstraintInterface {
-  constructor(@InjectDataSource() private readonly dataSource: DataSource) {}
+@ValidatorConstraint({ name: 'isUnique', async: true })
+@Injectable()
+export class IsUniqueConstraint implements ValidatorConstraintInterface {
+  constructor(private dataSource: DataSource) {}
 
-  public async validate<E>(
-    _value: string,
-    args: IUniqueValidationArguments<E>,
-  ): Promise<boolean> {
-    const [entityClass, findCondition] = args.constraints;
+  async validate(value: string, args: ValidationArguments) {
+    const entity = await this.dataSource
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+      .getRepository(args.constraints[0])
+      .findOne({
+        where: {
+          [args.property]: value,
+        },
+        withDeleted: true,
+      });
 
-    return (
-      (await this.dataSource.getRepository(entityClass).count({
-        where: findCondition(args),
-      })) <= 0
-    );
+    return entity ? false : true;
   }
 
   defaultMessage(args: ValidationArguments): string {
@@ -38,25 +37,17 @@ export class UniqueValidator implements ValidatorConstraintInterface {
   }
 }
 
-type UniqueValidationConstraints<E> = [
-  ObjectType<E> | EntitySchema<E> | string,
-  (validationArguments: ValidationArguments) => FindOptionsWhere<E>,
-];
-interface IUniqueValidationArguments<E> extends ValidationArguments {
-  constraints: UniqueValidationConstraints<E>;
-}
-
-export function Unique<E>(
-  constraints: Partial<UniqueValidationConstraints<E>>,
+export function IsUnique<E>(
+  entity: EntityTarget<E>,
   validationOptions?: ValidationOptions,
 ): PropertyDecorator {
-  return function (object, propertyName: string | symbol) {
+  return function (object: object, propertyName: string) {
     registerDecorator({
       target: object.constructor,
-      propertyName: propertyName as string,
+      propertyName,
       options: validationOptions,
-      constraints,
-      validator: UniqueValidator,
+      constraints: [entity],
+      validator: IsUniqueConstraint,
     });
-  };
+  } as PropertyDecorator;
 }

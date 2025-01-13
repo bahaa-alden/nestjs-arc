@@ -1,3 +1,4 @@
+/* eslint-disable n/no-unsupported-features/es-syntax */
 import bcrypt from 'bcrypt';
 
 /**

@@ -4,6 +4,8 @@ import {
   PhoneFieldOptional,
   StringField,
 } from '../../../decorators/field.decorators.ts';
+import { IsUnique } from '../../../validators/unique.validator.ts';
+import { UserEntity } from '../../user/user.entity.ts';
 
 export class AuthRegisterLoginDto {
   @StringField()
@@ -13,6 +15,7 @@ export class AuthRegisterLoginDto {
   readonly lastName!: string;
 
   @EmailField()
+  @IsUnique(UserEntity)
   readonly email!: string;
 
   @PasswordField({ minLength: 6 })

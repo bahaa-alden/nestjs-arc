@@ -24,6 +24,8 @@ import { SessionModule } from './modules/session/session.module.ts';
 import { UserModule } from './modules/user/user.module.ts';
 import { ApiConfigService } from './shared/services/api-config.service.ts';
 import { SharedModule } from './shared/shared.module.ts';
+import { IsExistConstraint } from './validators/exists.validator.ts';
+import { IsUniqueConstraint } from './validators/unique.validator.ts';
 
 @Module({
   imports: [
@@ -83,6 +85,6 @@ import { SharedModule } from './shared/shared.module.ts';
     HealthCheckerModule,
     SharedModule,
   ],
-  providers: [],
+  providers: [IsUniqueConstraint, IsExistConstraint],
 })
 export class AppModule {}

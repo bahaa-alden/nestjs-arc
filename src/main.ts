@@ -3,6 +3,7 @@ import { HttpAdapterHost, NestFactory, Reflector } from '@nestjs/core';
 import { Transport } from '@nestjs/microservices';
 import type { NestExpressApplication } from '@nestjs/platform-express';
 import { ExpressAdapter } from '@nestjs/platform-express';
+import { useContainer } from 'class-validator';
 import compression from 'compression';
 import helmet from 'helmet';
 import morgan from 'morgan';
@@ -25,6 +26,7 @@ export async function bootstrap(): Promise<NestExpressApplication> {
     new ExpressAdapter(),
     { cors: true },
   );
+  useContainer(app.select(AppModule), { fallbackOnErrors: true });
   app.enable('trust proxy'); // only if you're behind a reverse proxy (Heroku, Bluemix, AWS ELB, Nginx, etc)
   app.use(helmet());
   // app.setGlobalPrefix('/api'); use api as global prefix if you don't have subdomain
@@ -81,6 +83,9 @@ export async function bootstrap(): Promise<NestExpressApplication> {
   await app.listen(port);
 
   console.info(`server running on ${await app.getUrl()}`);
+  console.info(
+    `Documentation: http://localhost:${process.env.PORT}/documentation`,
+  );
 
   return app;
 }

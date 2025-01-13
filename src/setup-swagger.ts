@@ -60,8 +60,4 @@ Routes is following REST standard (Richardson level 3)
       persistAuthorization: true,
     },
   });
-
-  console.info(
-    `Documentation: http://localhost:${process.env.PORT}/documentation`,
-  );
 }
