@@ -73,10 +73,9 @@ export class AuthService {
       .createHash('sha256')
       .update(randomStringGenerator())
       .digest('hex');
-
     const session = await this.sessionService.create({
-      user: user.toDto(),
       hash,
+      user: user.toDto(),
     });
 
     const { token, refreshToken, tokenExpires } = await this.getTokensData({

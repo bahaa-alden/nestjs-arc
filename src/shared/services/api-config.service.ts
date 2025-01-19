@@ -121,6 +121,14 @@ export class ApiConfigService {
     };
   }
 
+  get cloudinaryConfig() {
+    return {
+      cloud_name: this.getString('CLOUDINARY_CLOUD_NAME'),
+      api_key: this.getString('CLOUDINARY_API_KEY'),
+      api_secret: this.getString('CLOUDINARY_API_SECRET'),
+    };
+  }
+
   get documentationEnabled(): boolean {
     return this.getBoolean('ENABLE_DOCUMENTATION');
   }
@@ -162,6 +170,13 @@ export class ApiConfigService {
       },
       defaultName: this.getString('MAIL_DEFAULT_NAME'),
       defaultEmail: this.getString('MAIL_DEFAULT_EMAIL'),
+      isLive: this.getBoolean('MAIL_LIVE'),
+    };
+  }
+
+  get redisConfig() {
+    return {
+      url: this.getString('REDIS_URL'),
     };
   }
 
@@ -169,7 +184,7 @@ export class ApiConfigService {
     return {
       name: this.getString('APP_NAME'),
       port: this.getString('PORT'),
-      frontendDomain: this.getString('FRONEND_DOMAIN'),
+      frontendDomain: this.getString('FRONTEND_DOMAIN'),
       workingDirectory: process.env.PWD ?? process.cwd(),
     };
   }

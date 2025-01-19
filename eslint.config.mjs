@@ -3,14 +3,14 @@ import stylisticPlugin from '@stylistic/eslint-plugin';
 import canonicalPlugin from 'eslint-plugin-canonical';
 import nPlugin from 'eslint-plugin-n';
 import prettierPlugin from 'eslint-plugin-prettier/recommended';
-import sonarjsPlugin from "eslint-plugin-sonarjs";
+import sonarjsPlugin from 'eslint-plugin-sonarjs';
 import promisePlugin from 'eslint-plugin-promise';
 import simpleImportSort from 'eslint-plugin-simple-import-sort';
-import importPlugin from "eslint-plugin-import";
+import importPlugin from 'eslint-plugin-import';
 import unicornPlugin from 'eslint-plugin-unicorn';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
-import github from 'eslint-plugin-github'
+import github from 'eslint-plugin-github';
 
 let githubFlatConfig = github.getFlatConfigs();
 export default tseslint.config(
@@ -52,10 +52,7 @@ export default tseslint.config(
     },
   },
   {
-    extends: [
-      githubFlatConfig.recommended,
-      ...githubFlatConfig.typescript,
-    ],
+    extends: [githubFlatConfig.recommended, ...githubFlatConfig.typescript],
     rules: {
       'eslintComments/no-use': 'off',
     },
@@ -67,7 +64,10 @@ export default tseslint.config(
     ],
     rules: {
       'importPlugin/extensions': ['error', 'always', { ignorePackages: true }],
-      'importPlugin/consistent-type-specifier-style': ['error', 'prefer-top-level'],
+      'importPlugin/consistent-type-specifier-style': [
+        'error',
+        'prefer-top-level',
+      ],
       // "importPlugin/no-unresolved": ["error", {
       //   ignore: ["^@hr-drone/*", "^firebase-admin/.+"],
       // }],
@@ -83,9 +83,7 @@ export default tseslint.config(
         ...globals.node,
       },
     },
-    extends: [
-      unicornPlugin.configs['flat/all'],
-    ],
+    extends: [unicornPlugin.configs['flat/all']],
     rules: {
       'unicorn/prevent-abbreviations': 'off',
       'unicorn/no-abusive-eslint-disable': 'off',
@@ -102,9 +100,7 @@ export default tseslint.config(
         ...globals.node,
       },
     },
-    extends: [
-      canonicalPlugin.configs['flat/recommended'],
-    ],
+    extends: [canonicalPlugin.configs['flat/recommended']],
     rules: {
       'canonical/filename-match-exported': 'error',
       'canonical/import-specifier-newline': 'off',
@@ -121,9 +117,7 @@ export default tseslint.config(
         ...globals.node,
       },
     },
-    extends: [
-      sonarjsPlugin.configs.recommended,
-    ],
+    extends: [sonarjsPlugin.configs.recommended],
     rules: {
       'sonarjs/no-duplicate-string': 'off',
     },
@@ -135,9 +129,7 @@ export default tseslint.config(
         ...globals.node,
       },
     },
-    extends: [
-      prettierPlugin,
-    ],
+    extends: [prettierPlugin],
     rules: {
       'prettier/prettier': [
         'error',
@@ -157,19 +149,19 @@ export default tseslint.config(
         ...globals.node,
       },
     },
-    extends: [
-      nPlugin.configs['flat/recommended'],
-    ],
+    extends: [nPlugin.configs['flat/recommended']],
     rules: {
       'n/no-extraneous-import': 'off',
       'n/no-missing-import': 'off',
     },
   },
   {
-    extends: [  ...tseslint.configs.strictTypeChecked,
+    extends: [
+      ...tseslint.configs.strictTypeChecked,
       tseslint.configs.eslintRecommended,
       ...tseslint.configs.stylisticTypeChecked,
-      ...tseslint.configs.recommendedTypeChecked,],
+      ...tseslint.configs.recommendedTypeChecked,
+    ],
     rules: {
       'no-redeclare': 'off',
       '@typescript-eslint/no-redeclare': 'error',
@@ -196,7 +188,7 @@ export default tseslint.config(
 
       '@typescript-eslint/no-restricted-types': 'error',
       '@typescript-eslint/no-empty-object-type': 'error',
-      '@typescript-eslint/no-unsafe-function-type': 'error',
+      '@typescript-eslint/no-unsafe-function-type': 'allow',
       '@typescript-eslint/no-wrapper-object-types': 'error',
 
       '@typescript-eslint/explicit-member-accessibility': [
@@ -442,17 +434,17 @@ export default tseslint.config(
   },
   {
     languageOptions: {
-      ecmaVersion: "latest",
-      sourceType: "module",
-      globals: { ...globals.node, /*...globals.browser*/ },
+      ecmaVersion: 'latest',
+      sourceType: 'module',
+      globals: { ...globals.node /*...globals.browser*/ },
       parserOptions: {
         projectService: {
-          extraFileExtensions: [".ts"],
+          extraFileExtensions: ['.ts'],
           defaultProject: 'tsconfig.eslint.json',
         },
         // @ts-ignore
         tsconfigRootDir: import.meta.dirname,
       },
     },
-  }
+  },
 );

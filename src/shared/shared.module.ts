@@ -6,6 +6,7 @@ import { LoggerService } from './logger/logger.service.ts';
 import { MailModule } from './mail/mail.module.ts';
 import { ApiConfigService } from './services/api-config.service.ts';
 import { AwsS3Service } from './services/aws-s3.service.ts';
+import { CloudinaryService } from './services/cloudinary.service.ts';
 import { GeneratorService } from './services/generator.service.ts';
 import { TranslationService } from './services/translation.service.ts';
 import { ValidatorService } from './services/validator.service.ts';
@@ -17,6 +18,7 @@ const providers: Provider[] = [
   GeneratorService,
   TranslationService,
   LoggerService,
+  CloudinaryService,
 ];
 
 @Global()

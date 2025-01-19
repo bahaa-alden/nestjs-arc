@@ -50,6 +50,7 @@ import { IsUniqueConstraint } from './validators/unique.validator.ts';
       isGlobal: true,
       envFilePath: '.env',
     }),
+
     TypeOrmModule.forRootAsync({
       imports: [SharedModule],
       useFactory: (configService: ApiConfigService) =>

@@ -25,8 +25,8 @@ export class UserDto extends AbstractDto {
   @EnumFieldOptional(() => RoleType)
   role?: RoleType;
 
-  @EmailFieldOptional({ nullable: true })
-  email?: string | null;
+  @EmailFieldOptional({})
+  email?: string;
 
   @StringFieldOptional({ nullable: true })
   avatar?: string | null;

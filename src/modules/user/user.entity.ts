@@ -21,8 +21,8 @@ export class UserEntity extends AbstractEntity<UserDto, UserDtoOptions> {
   @Column({ type: 'enum', enum: RoleType, default: RoleType.USER })
   role!: RoleType;
 
-  @Column({ unique: true, nullable: true, type: 'varchar' })
-  email!: string | null;
+  @Column({ unique: true, type: 'varchar' })
+  email!: string;
 
   @Column({ nullable: true, type: 'varchar' })
   password!: string | null;

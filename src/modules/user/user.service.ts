@@ -11,7 +11,7 @@ import type { PageDto } from '../../common/dto/page.dto.ts';
 import { FileNotImageException } from '../../exceptions/file-not-image.exception.ts';
 import { UserNotFoundException } from '../../exceptions/user-not-found.exception.ts';
 import type { IFile } from '../../interfaces/IFile.ts';
-import { AwsS3Service } from '../../shared/services/aws-s3.service.ts';
+import { CloudinaryService } from '../../shared/services/cloudinary.service.ts';
 import { ValidatorService } from '../../shared/services/validator.service.ts';
 import type { Reference } from '../../types.ts';
 import { AuthRegisterLoginDto } from '../auth/dto/auth-register-login.dto.ts';
@@ -29,7 +29,7 @@ export class UserService {
     @InjectRepository(UserEntity)
     private userRepository: Repository<UserEntity>,
     private validatorService: ValidatorService,
-    private awsS3Service: AwsS3Service,
+    private cloudinaryService: CloudinaryService,
     private commandBus: CommandBus,
   ) {}
 
@@ -74,7 +74,7 @@ export class UserService {
     }
 
     if (file) {
-      user.avatar = await this.awsS3Service.uploadImage(file);
+      user.avatar = await this.cloudinaryService.uploadSinglePhoto(file.buffer);
     }
 
     await this.userRepository.save(user);
