@@ -2,7 +2,7 @@ import type { Relation } from 'typeorm';
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 
 import { AbstractTranslationEntity } from '../../common/abstract.entity.ts';
-import { UseDto } from '../../decorators/use-dto.decorator.ts';
+import { UseDto } from '../../common/decorators/use-dto.decorator.ts';
 import { PostTranslationDto } from './dtos/post-translation.dto.ts';
 import { PostEntity } from './post.entity.ts';
 

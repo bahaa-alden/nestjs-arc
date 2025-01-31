@@ -1,7 +1,7 @@
 import {
   PasswordField,
   StringField,
-} from '../../../decorators/field.decorators.ts';
+} from '../../../common/decorators/field.decorators.ts';
 
 export class AuthResetPasswordDto {
   @PasswordField()

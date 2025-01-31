@@ -4,7 +4,7 @@ import { AbstractDto } from '../../../common/dto/abstract.dto.ts';
 import {
   DynamicTranslate,
   StaticTranslate,
-} from '../../../decorators/translate.decorator.ts';
+} from '../../../common/decorators/translate.decorator.ts';
 import type { PostEntity } from '../post.entity.ts';
 import { PostTranslationDto } from './post-translation.dto.ts';
 

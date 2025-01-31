@@ -1,8 +1,8 @@
 import { Column, Entity, OneToMany, OneToOne, VirtualColumn } from 'typeorm';
 
 import { AbstractEntity } from '../../common/abstract.entity.ts';
-import { RoleType } from '../../constants/role-type.ts';
-import { UseDto } from '../../decorators/use-dto.decorator.ts';
+import { RoleType } from '../../common/constants/role-type.ts';
+import { UseDto } from '../../common/decorators/use-dto.decorator.ts';
 import { PostEntity } from '../post/post.entity.ts';
 import { SessionEntity } from '../session/session.entity.ts';
 import type { UserDtoOptions } from './dtos/user.dto.ts';

@@ -48,7 +48,33 @@ Routes is following REST standard (Richardson level 3)
 </p>
 </details>`,
     )
-    .addBearerAuth();
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+        description: 'Access token for authentication',
+      },
+      'accessToken',
+    )
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+        description: 'Refresh token for obtaining a new access token',
+      },
+      'refreshToken',
+    )
+    .addApiKey(
+      {
+        type: 'apiKey',
+        in: 'header',
+        name: 'x-api-key',
+        description: 'API Key for authentication',
+      },
+      'xApiKey',
+    );
 
   if (process.env.API_VERSION) {
     documentBuilder.setVersion(process.env.API_VERSION);

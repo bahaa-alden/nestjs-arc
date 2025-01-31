@@ -8,16 +8,14 @@ import {
   Patch,
   Post,
   UploadedFile,
-  UseGuards,
 } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
-import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
-import { RoleType } from '../../constants/role-type.ts';
-import { AuthUser } from '../../decorators/auth-user.decorator.ts';
-import { Auth } from '../../decorators/http.decorators.ts';
-import { ApiFile } from '../../decorators/swagger.schema.ts';
-import { IFile } from '../../interfaces/IFile.ts';
+import { RoleType } from '../../common/constants/role-type.ts';
+import { AuthUser } from '../../common/decorators/auth-user.decorator.ts';
+import { Auth } from '../../common/decorators/http.decorators.ts';
+import { ApiFile } from '../../common/decorators/swagger.schema.ts';
+import { IFile } from '../../common/interfaces/IFile.ts';
 import type { Reference } from '../../types.ts';
 import { UserDto } from '../user/dtos/user.dto.ts';
 import { AuthService } from './auth.service.ts';
@@ -89,12 +87,11 @@ export class AuthController {
     );
   }
 
-  @ApiBearerAuth()
+  @Auth({ jwtRefreshToken: true })
   @ApiOkResponse({
     type: RefreshResponseDto,
   })
   @Post('refresh')
-  @UseGuards(AuthGuard('jwt-refresh'))
   @HttpCode(HttpStatus.OK)
   public refresh(
     @AuthUser() user: IJwtRefreshPayloadType,
@@ -105,7 +102,7 @@ export class AuthController {
     });
   }
 
-  @Auth([RoleType.USER, RoleType.ADMIN])
+  @Auth({ roles: [RoleType.USER, RoleType.ADMIN], jwtAccessToken: true })
   @Post('logout')
   @HttpCode(HttpStatus.NO_CONTENT)
   public async logout(@AuthUser() user: IJwtRefreshPayloadType): Promise<void> {
@@ -114,7 +111,7 @@ export class AuthController {
     });
   }
 
-  @Auth([RoleType.USER, RoleType.ADMIN])
+  @Auth({ roles: [RoleType.USER, RoleType.ADMIN], jwtAccessToken: true })
   @Patch('me')
   @HttpCode(HttpStatus.OK)
   @ApiOkResponse({
@@ -127,7 +124,7 @@ export class AuthController {
     return this.authService.update(user, userDto);
   }
 
-  @Auth([RoleType.USER, RoleType.ADMIN])
+  @Auth({ roles: [RoleType.USER, RoleType.ADMIN], jwtAccessToken: true })
   @Delete('me')
   @HttpCode(HttpStatus.NO_CONTENT)
   public async delete(@AuthUser() user: JwtPayloadType): Promise<void> {
@@ -136,7 +133,7 @@ export class AuthController {
 
   @Get('me')
   @HttpCode(HttpStatus.OK)
-  @Auth([RoleType.USER, RoleType.ADMIN])
+  @Auth({ roles: [RoleType.USER, RoleType.ADMIN], jwtAccessToken: true })
   @ApiOkResponse({ type: UserDto, description: 'current user info' })
   async getCurrentUser(@AuthUser() user: JwtPayloadType): Promise<UserDto> {
     return this.authService.update(user);

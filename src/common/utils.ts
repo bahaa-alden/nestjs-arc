@@ -1,4 +1,5 @@
 /* eslint-disable n/no-unsupported-features/es-syntax */
+import { BadRequestException, ConflictException } from '@nestjs/common';
 import bcrypt from 'bcrypt';
 
 /**
@@ -48,3 +49,23 @@ export function getVariableName<TResult>(
 
   return memberParts.at(-1);
 }
+
+export const needRecord = <T>(
+  record?: T | null,
+  err = new BadRequestException(),
+): T => {
+  if (!record) {
+    throw err;
+  }
+
+  return record;
+};
+
+export const existRecord = <T>(
+  record?: T | null,
+  err = new ConflictException('Already exists'),
+) => {
+  if (record) {
+    throw err;
+  }
+};

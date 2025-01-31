@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 
 import { MailData } from './interfaces/mail-data.interface.ts';
 import { InjectQueue } from '@nestjs/bull';
-import { QUEUE_NAME } from '../../constants/index.ts';
+import { QUEUE_NAME } from '../../common/constants/index.ts';
 import type { Queue } from 'bull';
 
 @Injectable()

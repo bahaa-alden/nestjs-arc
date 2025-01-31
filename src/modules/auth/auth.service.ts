@@ -13,9 +13,9 @@ import bcrypt from 'bcrypt';
 import { plainToClass } from 'class-transformer';
 import ms from 'ms';
 
+import { RoleType } from '../../common/constants/role-type.ts';
+import { IFile } from '../../common/interfaces/IFile.ts';
 import { validateHash } from '../../common/utils.ts';
-import { RoleType } from '../../constants/role-type.ts';
-import { IFile } from '../../interfaces/IFile.ts';
 import { MailService } from '../../shared/mail/mail.service.ts';
 import { ApiConfigService } from '../../shared/services/api-config.service.ts';
 import { Reference } from '../../types.ts';

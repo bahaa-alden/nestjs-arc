@@ -3,7 +3,7 @@ import {
   PasswordFieldOptional,
   PhoneFieldOptional,
   StringFieldOptional,
-} from '../../../decorators/field.decorators.ts';
+} from '../../../common/decorators/field.decorators.ts';
 
 export class AuthUpdateDto {
   @StringFieldOptional()

@@ -17,6 +17,7 @@ import {
 import { DataSource } from 'typeorm';
 import { addTransactionalDataSource } from 'typeorm-transactional';
 
+import { ApiKeyModule } from './modules/api-key/api-key.module.ts';
 import { AuthModule } from './modules/auth/auth.module.ts';
 import { HealthCheckerModule } from './modules/health-checker/health-checker.module.ts';
 import { PostModule } from './modules/post/post.module.ts';
@@ -24,8 +25,6 @@ import { SessionModule } from './modules/session/session.module.ts';
 import { UserModule } from './modules/user/user.module.ts';
 import { ApiConfigService } from './shared/services/api-config.service.ts';
 import { SharedModule } from './shared/shared.module.ts';
-import { IsExistConstraint } from './validators/exists.validator.ts';
-import { IsUniqueConstraint } from './validators/unique.validator.ts';
 
 @Module({
   imports: [
@@ -33,6 +32,7 @@ import { IsUniqueConstraint } from './validators/unique.validator.ts';
     UserModule,
     PostModule,
     SessionModule,
+    ApiKeyModule.forRoot(),
     ClsModule.forRoot({
       global: true,
       middleware: {
@@ -86,6 +86,6 @@ import { IsUniqueConstraint } from './validators/unique.validator.ts';
     HealthCheckerModule,
     SharedModule,
   ],
-  providers: [IsUniqueConstraint, IsExistConstraint],
+  providers: [],
 })
 export class AppModule {}

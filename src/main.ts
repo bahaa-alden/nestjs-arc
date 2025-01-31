@@ -10,10 +10,10 @@ import morgan from 'morgan';
 import { initializeTransactionalContext } from 'typeorm-transactional';
 
 import { AppModule } from './app.module.ts';
-import { HttpExceptionFilter } from './filters/bad-request.filter.ts';
-import { QueryFailedFilter } from './filters/query-failed.filter.ts';
-import { TranslationInterceptor } from './interceptors/translation-interceptor.service.ts';
-import { MainValidationPipe } from './pipes/main-validation.pipe.ts';
+import { MainValidationPipe } from './common//pipes/main-validation.pipe.ts';
+import { HttpExceptionFilter } from './common/filters/bad-request.filter.ts';
+import { QueryFailedFilter } from './common/filters/query-failed.filter.ts';
+import { TranslationInterceptor } from './common/interceptors/translation-interceptor.service.ts';
 import { setupSwagger } from './setup-swagger.ts';
 import { ApiConfigService } from './shared/services/api-config.service.ts';
 import { TranslationService } from './shared/services/translation.service.ts';

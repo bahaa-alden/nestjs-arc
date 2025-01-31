@@ -8,9 +8,9 @@ import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity
 import { Transactional } from 'typeorm-transactional';
 
 import type { PageDto } from '../../common/dto/page.dto.ts';
-import { FileNotImageException } from '../../exceptions/file-not-image.exception.ts';
-import { UserNotFoundException } from '../../exceptions/user-not-found.exception.ts';
-import type { IFile } from '../../interfaces/IFile.ts';
+import { FileNotImageException } from '../../common/exceptions/file-not-image.exception.ts';
+import { UserNotFoundException } from '../../common/exceptions/user-not-found.exception.ts';
+import type { IFile } from '../../common/interfaces/IFile.ts';
 import { CloudinaryService } from '../../shared/services/cloudinary.service.ts';
 import { ValidatorService } from '../../shared/services/validator.service.ts';
 import type { Reference } from '../../types.ts';

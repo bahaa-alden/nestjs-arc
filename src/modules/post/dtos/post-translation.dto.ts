@@ -1,9 +1,9 @@
 import { AbstractTranslationDto } from '../../../common/dto/abstract.dto.ts';
-import { LanguageCode } from '../../../constants/language-code.ts';
+import { LanguageCode } from '../../../common/constants/language-code.ts';
 import {
   EnumFieldOptional,
   StringFieldOptional,
-} from '../../../decorators/field.decorators.ts';
+} from '../../../common/decorators/field.decorators.ts';
 import type { PostTranslationEntity } from '../post-translation.entity.ts';
 
 export class PostTranslationDto extends AbstractTranslationDto {

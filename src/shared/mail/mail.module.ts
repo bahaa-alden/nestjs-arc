@@ -4,7 +4,7 @@ import { MailerService } from '../mailer/mailer.service.ts';
 import { MailService } from './mail.service.ts';
 import { MailProcessor } from './mail.processor.ts';
 import { BullModule } from '@nestjs/bull';
-import { QUEUE_NAME } from '../../constants/index.ts';
+import { QUEUE_NAME } from '../../common/constants/index.ts';
 import { BullService } from '../services/bull.service.ts';
 import { ConfigModule } from '@nestjs/config';
 

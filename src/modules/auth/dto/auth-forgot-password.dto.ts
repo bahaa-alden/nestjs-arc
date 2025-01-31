@@ -1,4 +1,4 @@
-import { EmailField } from '../../../decorators/field.decorators.ts';
+import { EmailField } from '../../../common/decorators/field.decorators.ts';
 
 export class AuthForgotPasswordDto {
   @EmailField()

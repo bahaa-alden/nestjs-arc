@@ -9,11 +9,11 @@ import {
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { PageDto } from '../../common/dto/page.dto.ts';
-import { RoleType } from '../../constants/role-type.ts';
-import { ApiPageResponse } from '../../decorators/api-page-response.decorator.ts';
-import { AuthUser } from '../../decorators/auth-user.decorator.ts';
-import { Auth, UUIDParam } from '../../decorators/http.decorators.ts';
-import { UseLanguageInterceptor } from '../../interceptors/language-interceptor.service.ts';
+import { RoleType } from '../../common/constants/role-type.ts';
+import { ApiPageResponse } from '../../common/decorators/api-page-response.decorator.ts';
+import { AuthUser } from '../../common/decorators/auth-user.decorator.ts';
+import { Auth, UUIDParam } from '../../common/decorators/http.decorators.ts';
+import { UseLanguageInterceptor } from '../../common/interceptors/language-interceptor.service.ts';
 import { TranslationService } from '../../shared/services/translation.service.ts';
 import { UserDto } from './dtos/user.dto.ts';
 import { UsersPageOptionsDto } from './dtos/users-page-options.dto.ts';
@@ -29,7 +29,7 @@ export class UserController {
   ) {}
 
   @Get('admin')
-  @Auth([RoleType.USER])
+  @Auth({ roles: [RoleType.USER], jwtAccessToken: true })
   @HttpCode(HttpStatus.OK)
   @UseLanguageInterceptor()
   async admin(@AuthUser() user: UserEntity) {
@@ -43,7 +43,7 @@ export class UserController {
   }
 
   @Get()
-  @Auth([RoleType.USER])
+  @Auth({ roles: [RoleType.USER], jwtAccessToken: true })
   @HttpCode(HttpStatus.OK)
   @ApiPageResponse({
     description: 'Get users list',
@@ -57,7 +57,7 @@ export class UserController {
   }
 
   @Get(':id')
-  @Auth([RoleType.USER])
+  @Auth({ roles: [RoleType.USER], jwtAccessToken: true })
   @HttpCode(HttpStatus.OK)
   @ApiResponse({
     status: HttpStatus.OK,

@@ -1,4 +1,4 @@
-import { StringField } from '../../../decorators/field.decorators.ts';
+import { StringField } from '../../../common/decorators/field.decorators.ts';
 
 export class AuthConfirmEmailDto {
   @StringField()

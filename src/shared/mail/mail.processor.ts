@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import path from 'node:path';
+
 import {
   OnQueueActive,
   OnQueueCompleted,
@@ -8,14 +10,13 @@ import {
 } from '@nestjs/bull';
 import type { Job } from 'bull';
 
-import { QUEUE_NAME } from '../../constants/index.ts';
+import { QUEUE_NAME } from '../../common/constants/index.ts';
+import { MaybeType } from '../../common/types/maybe.type.ts';
 import { LoggerService } from '../logger/logger.service.ts';
+import { MailerService } from '../mailer/mailer.service.ts';
 import { ApiConfigService } from '../services/api-config.service.ts';
-import { MaybeType } from '../../types/maybe.type.ts';
 import { TranslationService } from '../services/translation.service.ts';
 import { MailData } from './interfaces/mail-data.interface.ts';
-import path from 'node:path';
-import { MailerService } from '../mailer/mailer.service.ts';
 
 // Import utility functions and configurations
 

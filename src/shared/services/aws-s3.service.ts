@@ -3,7 +3,7 @@ import { createPresignedPost } from '@aws-sdk/s3-presigned-post';
 import { Injectable } from '@nestjs/common';
 import mime from 'mime-types';
 
-import type { IFile } from './../../interfaces/IFile.ts';
+import type { IFile } from '../../common/interfaces/IFile.ts';
 import { ApiConfigService } from './api-config.service.ts';
 import { GeneratorService } from './generator.service.ts';
 

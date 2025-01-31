@@ -1,7 +1,7 @@
 import {
   EmailField,
   PasswordField,
-} from '../../../decorators/field.decorators.ts';
+} from '../../../common/decorators/field.decorators.ts';
 
 export class AuthEmailLoginDto {
   @EmailField()

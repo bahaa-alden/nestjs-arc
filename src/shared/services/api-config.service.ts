@@ -186,6 +186,7 @@ export class ApiConfigService {
       port: this.getString('PORT'),
       frontendDomain: this.getString('FRONTEND_DOMAIN'),
       workingDirectory: process.env.PWD ?? process.cwd(),
+      timezone: this.getString('APP_TIMEZONE'),
     };
   }
 

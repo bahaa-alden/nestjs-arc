@@ -11,7 +11,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-import { LanguageCode } from '../constants/language-code.ts';
+import { LanguageCode } from './constants/language-code.ts';
 import type {
   AbstractDto,
   AbstractTranslationDto,
