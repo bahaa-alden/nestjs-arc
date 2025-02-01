@@ -7,6 +7,7 @@ import { useContainer } from 'class-validator';
 import compression from 'compression';
 import helmet from 'helmet';
 import morgan from 'morgan';
+import { Logger as PinoLogger } from 'nestjs-pino';
 import { initializeTransactionalContext } from 'typeorm-transactional';
 
 import { AppModule } from './app.module.ts';
@@ -26,6 +27,10 @@ export async function bootstrap(): Promise<NestExpressApplication> {
     new ExpressAdapter(),
     { cors: true },
   );
+
+  // logger
+  app.useLogger(app.get(PinoLogger));
+
   useContainer(app.select(AppModule), { fallbackOnErrors: true });
   app.enable('trust proxy'); // only if you're behind a reverse proxy (Heroku, Bluemix, AWS ELB, Nginx, etc)
   app.use(helmet());

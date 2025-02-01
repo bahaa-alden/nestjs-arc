@@ -6,6 +6,7 @@ import type { ThrottlerOptions } from '@nestjs/throttler';
 import type { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { default as parse } from 'parse-duration';
 
+import { AppEnv } from '../../common/constants/app.enum.ts';
 import { UserSubscriber } from '../../entity-subscribers/user-subscriber.ts';
 import { SnakeNamingStrategy } from '../../snake-naming.strategy.ts';
 
@@ -14,15 +15,15 @@ export class ApiConfigService {
   constructor(private configService: ConfigService) {}
 
   get isDevelopment(): boolean {
-    return this.nodeEnv === 'development';
+    return this.nodeEnv === AppEnv.development;
   }
 
   get isProduction(): boolean {
-    return this.nodeEnv === 'production';
+    return this.nodeEnv === AppEnv.production;
   }
 
   get isTest(): boolean {
-    return this.nodeEnv === 'test';
+    return this.nodeEnv === AppEnv.test;
   }
 
   private getNumber(key: string): number {
@@ -65,8 +66,8 @@ export class ApiConfigService {
     return value.replaceAll(String.raw`\n`, '\n');
   }
 
-  get nodeEnv(): string {
-    return this.getString('NODE_ENV');
+  get nodeEnv(): AppEnv {
+    return this.getString('NODE_ENV') as AppEnv;
   }
 
   get fallbackLanguage(): string {
@@ -187,6 +188,13 @@ export class ApiConfigService {
       frontendDomain: this.getString('FRONTEND_DOMAIN'),
       workingDirectory: process.env.PWD ?? process.cwd(),
       timezone: this.getString('APP_TIMEZONE'),
+    };
+  }
+
+  get debugConfig() {
+    return {
+      debugEnable: this.getBoolean('DEBUG_ENABLE'),
+      debugLevel: this.getString('DEBUG_LEVEL'),
     };
   }
 

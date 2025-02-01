@@ -68,4 +68,6 @@ export const existRecord = <T>(
   if (record) {
     throw err;
   }
+
+  return record;
 };

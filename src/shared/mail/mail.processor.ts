@@ -9,10 +9,10 @@ import {
   Processor,
 } from '@nestjs/bull';
 import type { Job } from 'bull';
+import { PinoLogger } from 'nestjs-pino';
 
 import { QUEUE_NAME } from '../../common/constants/index.ts';
 import { MaybeType } from '../../common/types/maybe.type.ts';
-import { LoggerService } from '../logger/logger.service.ts';
 import { MailerService } from '../mailer/mailer.service.ts';
 import { ApiConfigService } from '../services/api-config.service.ts';
 import { TranslationService } from '../services/translation.service.ts';
@@ -27,7 +27,7 @@ export class MailProcessor {
   constructor(
     private apiConfig: ApiConfigService,
     private readonly mailerService: MailerService,
-    private loggerService: LoggerService,
+    private loggerService: PinoLogger,
     private readonly translationService: TranslationService,
   ) {}
 
@@ -73,7 +73,7 @@ export class MailProcessor {
     const { mailData } = job.data;
 
     // Log the initiation of sending a welcome email
-    this.loggerService.log(
+    this.loggerService.info(
       this.constructor.name,
       `sending welcome email to '${job.data.mailData.to}'`,
     );
@@ -138,7 +138,7 @@ export class MailProcessor {
   ): Promise<any> {
     const { mailData } = job.data;
     // Log the initiation of sending a reset password email
-    this.loggerService.log(
+    this.loggerService.info(
       this.constructor.name,
       `sending password reset token to '${job.data.mailData.to}'`,
     );
@@ -206,7 +206,7 @@ export class MailProcessor {
     const { mailData } = job.data;
 
     // Log the initiation of sending a password changed email
-    this.loggerService.log(
+    this.loggerService.info(
       this.constructor.name,
 
       `sending password changed message to '${job.data.mailData.to}'`,

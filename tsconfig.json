@@ -34,7 +34,8 @@
     // "baseUrl": ".",
     "incremental": true,
     "strict": true,
-    "strictNullChecks": true
+    "strictNullChecks": true,
+    "typeRoots": ["./node_modules/@types", "./@types"]
   },
   "ts-node": {
     "experimentalSpecifierResolution": "node",

@@ -1,9 +1,11 @@
 import type { Provider } from '@nestjs/common';
 import { Global, Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
+import { LoggerModule as PinoLoggerModule } from 'nestjs-pino';
 
 import { HelperModule } from './helper/helper.module.ts';
-import { LoggerService } from './logger/logger.service.ts';
+import { LoggerOptionModule } from './logger/logger-option.module.ts';
+import { LoggerOptionService } from './logger/services/logger-option.service.ts';
 import { MailModule } from './mail/mail.module.ts';
 import { RequestModule } from './request/request.module.ts';
 import { ApiConfigService } from './services/api-config.service.ts';
@@ -19,7 +21,7 @@ const providers: Provider[] = [
   AwsS3Service,
   GeneratorService,
   TranslationService,
-  LoggerService,
+  LoggerOptionService,
   CloudinaryService,
 ];
 
@@ -32,6 +34,12 @@ const providers: Provider[] = [
     MailModule,
     HelperModule.forRoot(),
     RequestModule.forRoot(),
+    PinoLoggerModule.forRootAsync({
+      imports: [LoggerOptionModule],
+      inject: [LoggerOptionService],
+      useFactory: (loggerOptionService: LoggerOptionService) =>
+        loggerOptionService.createOptions(),
+    }),
   ],
   exports: [...providers, CqrsModule],
 })
