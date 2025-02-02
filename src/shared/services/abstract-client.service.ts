@@ -2,10 +2,10 @@ import type { ClientProxy } from '@nestjs/microservices';
 import { plainToInstance } from 'class-transformer';
 import { firstValueFrom } from 'rxjs';
 
-import type { Constructor } from '../types.ts';
-import type { PageDto } from './dto/page.dto.ts';
-import type { PageMetaDto } from './dto/page-meta.dto.ts';
-import { PageTypeException } from './exceptions/page-type.exception.ts';
+import type { PageDto } from '../../common/dto/page.dto.ts';
+import type { PageMetaDto } from '../../common/dto/page-meta.dto.ts';
+import { PageTypeException } from '../../common/exceptions/page-type.exception.ts';
+import type { Constructor } from '../../types.ts';
 
 /**
  * Fixme: This class designed to use with @nestjs/microservices by extending and creating a new class.

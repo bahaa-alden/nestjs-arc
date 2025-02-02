@@ -1,4 +1,3 @@
-import { AbstractDto } from '../../../common/dto/abstract.dto.ts';
 import { RoleType } from '../../../common/constants/role-type.ts';
 import {
   BooleanFieldOptional,
@@ -7,6 +6,7 @@ import {
   PhoneFieldOptional,
   StringFieldOptional,
 } from '../../../common/decorators/field.decorators.ts';
+import { AbstractDto } from '../../../common/dto/abstract.dto.ts';
 import type { UserEntity } from '../user.entity.ts';
 
 // TODO, remove this class and use constructor's second argument's type

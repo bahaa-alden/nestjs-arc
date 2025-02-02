@@ -5,6 +5,9 @@ import type { JwtPayloadType } from '../../../modules/auth/strategies/types/jwt-
 
 export interface IRequestApp<T = JwtPayloadType, B = ApiKeyPayloadDto>
   extends Request {
+  __pagination: any;
+  __language: any;
+  __version: string | undefined;
   apiKey?: B;
   user?: T & Express.User;
 }

@@ -1,19 +1,13 @@
-import {
-  Controller,
-  Get,
-  HttpCode,
-  HttpStatus,
-  Query,
-  ValidationPipe,
-} from '@nestjs/common';
+import { Controller, Get, HttpCode, HttpStatus } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 
-import { PageDto } from '../../common/dto/page.dto.ts';
 import { RoleType } from '../../common/constants/role-type.ts';
-import { ApiPageResponse } from '../../common/decorators/api-page-response.decorator.ts';
 import { AuthUser } from '../../common/decorators/auth-user.decorator.ts';
 import { Auth, UUIDParam } from '../../common/decorators/http.decorators.ts';
+import { PaginationQuery } from '../../common/decorators/pagination.decorator.ts';
+import { PageDto } from '../../common/dto/page.dto.ts';
 import { UseLanguageInterceptor } from '../../common/interceptors/language-interceptor.service.ts';
+import { ResponsePaging } from '../../shared/response/decorators/response.decorator.ts';
 import { TranslationService } from '../../shared/services/translation.service.ts';
 import { UserDto } from './dtos/user.dto.ts';
 import { UsersPageOptionsDto } from './dtos/users-page-options.dto.ts';
@@ -43,14 +37,14 @@ export class UserController {
   }
 
   @Get()
-  @Auth({ roles: [RoleType.USER], jwtAccessToken: true })
-  @HttpCode(HttpStatus.OK)
-  @ApiPageResponse({
+  // @Auth({ roles: [RoleType.USER], jwtAccessToken: true })
+  @ResponsePaging({
     description: 'Get users list',
-    type: PageDto,
+    type: UserDto,
   })
+  @Auth({ roles: [RoleType.USER], jwtAccessToken: true })
   getUsers(
-    @Query(new ValidationPipe({ transform: true }))
+    @PaginationQuery({ availableSearch: ['name', 'email'] })
     pageOptionsDto: UsersPageOptionsDto,
   ): Promise<PageDto<UserDto>> {
     return this.userService.getUsers(pageOptionsDto);

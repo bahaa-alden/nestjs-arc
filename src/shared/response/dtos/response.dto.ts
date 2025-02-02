@@ -11,8 +11,6 @@ export class ResponseMetadataDto {
 
   version!: string;
 
-  repoVersion!: string;
-
   [key: string]: any;
 }
 
@@ -26,16 +24,6 @@ export class ResponseDto {
     example: 200,
   })
   statusCode!: number;
-
-  @ApiProperty({
-    name: 'message',
-    required: true,
-    nullable: false,
-    description: 'Message base on language',
-    type: 'string',
-    example: 'message endpoint',
-  })
-  message!: string;
 
   @ApiProperty({
     name: '_metadata',
@@ -52,6 +40,8 @@ export class ResponseDto {
       repoVersion: '1.0.0',
     },
   })
+  _metadata!: ResponseMetadataDto;
+
   @ApiHideProperty()
   data?: Record<string, any>;
 }
