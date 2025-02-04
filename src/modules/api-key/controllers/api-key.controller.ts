@@ -7,18 +7,17 @@ import {
   Patch,
   Post,
   Put,
-  Query,
-  ValidationPipe,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 
 import { RoleType } from '../../../common/constants/role-type.ts';
-import { ApiPageResponse } from '../../../common/decorators/api-page-response.decorator.ts';
 import { Auth } from '../../../common/decorators/http.decorators.ts';
+import { PaginationQuery } from '../../../common/decorators/pagination.decorator.ts';
 import { ApiKeyNotExpiredPipe } from '../../../common/pipes/api-key-expired.pipe.ts';
 import { ApiKeyIsActivePipe } from '../../../common/pipes/api-key-is-active.pipe.ts';
 import { ApiKeyParsePipe } from '../../../common/pipes/api-key-parse.pipe.ts';
 import { RequestRequiredPipe } from '../../../common/pipes/request-required.pipe.ts';
+import { ResponsePaging } from '../../../shared/response/decorators/response.decorator.ts';
 import { IResponse } from '../../../shared/response/interfaces/response.interface.ts';
 import {
   ApiKeyAdminActiveDoc,
@@ -41,14 +40,14 @@ import { ApiKeyService } from '../services/api-key.service.ts';
 export class ApiKeyAdminController {
   constructor(private readonly apiKeyService: ApiKeyService) {}
 
-  @ApiPageResponse({
+  @ResponsePaging({
     description: 'Get users list',
     type: ApiKeyDto,
   })
   @Auth({ roles: [RoleType.ADMIN], jwtAccessToken: true })
   @Get('/list')
   async list(
-    @Query(new ValidationPipe({ transform: true }))
+    @PaginationQuery({ availableSearch: [] })
     pageOptionsDto: ApiKeysPageOptionsDto,
   ) {
     return this.apiKeyService.findAll(pageOptionsDto);

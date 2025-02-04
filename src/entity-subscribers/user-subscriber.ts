@@ -5,18 +5,24 @@ import type {
 } from 'typeorm';
 import { EventSubscriber } from 'typeorm';
 
-import { generateHash } from '../common/utils.ts';
-import { UserEntity } from '../modules/user/user.entity.ts';
+import { UserEntity } from '../../modules/user/user.entity.ts';
+import { HelperHashService } from '../../shared/helper/services/helper-hash.service.ts';
 
 @EventSubscriber()
 export class UserSubscriber implements EntitySubscriberInterface<UserEntity> {
+  constructor(private helperService: HelperHashService) {}
+
   listenTo(): typeof UserEntity {
     return UserEntity;
   }
 
   beforeInsert(event: InsertEvent<UserEntity>): void {
     if (event.entity.password) {
-      event.entity.password = generateHash(event.entity.password);
+      const salt = this.helperService.randomSalt(7);
+      event.entity.password = this.helperService.bcrypt(
+        event.entity.password,
+        salt,
+      );
     }
   }
 
@@ -24,7 +30,8 @@ export class UserSubscriber implements EntitySubscriberInterface<UserEntity> {
     const entity = event.entity as UserEntity;
 
     if (entity.password && entity.password !== event.databaseEntity.password) {
-      entity.password = generateHash(entity.password);
+      const salt = this.helperService.randomSalt(7);
+      entity.password = this.helperService.bcrypt(entity.password, salt);
     }
   }
 }

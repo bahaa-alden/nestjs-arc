@@ -2,9 +2,9 @@ import type { HelperDateDayOf } from '../../../common/constants/helper.enum';
 
 // Helper Encryption
 export interface IHelperJwtVerifyOptions {
-  audience: string;
-  issuer: string;
-  subject: string;
+  audience?: string;
+  issuer?: string;
+  subject?: string;
   secretKey: string;
   ignoreExpiration?: boolean;
 }

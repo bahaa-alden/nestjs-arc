@@ -8,6 +8,7 @@ import {
   ExecutionContext,
   Injectable,
   NestInterceptor,
+  UseInterceptors,
 } from '@nestjs/common';
 import { HttpArgumentsHost } from '@nestjs/common/interfaces';
 import { ConfigService } from '@nestjs/config';
@@ -95,4 +96,8 @@ export class ResponsePagingInterceptor
       }),
     ) as Observable<Promise<ResponsePagingDto>>;
   }
+}
+
+export function UseResponsePagingInterceptor() {
+  return UseInterceptors(ResponsePagingInterceptor);
 }

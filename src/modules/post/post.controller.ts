@@ -7,7 +7,6 @@ import {
   HttpStatus,
   Post,
   Put,
-  Query,
 } from '@nestjs/common';
 import {
   ApiAcceptedResponse,
@@ -16,12 +15,12 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 
-import type { PageDto } from '../../common/dto/page.dto.ts';
 import { RoleType } from '../../common/constants/role-type.ts';
-import { ApiPageResponse } from '../../common/decorators/api-page-response.decorator.ts';
 import { AuthUser } from '../../common/decorators/auth-user.decorator.ts';
 import { Auth, UUIDParam } from '../../common/decorators/http.decorators.ts';
-import { UseLanguageInterceptor } from '../../common/interceptors/language-interceptor.service.ts';
+import { PaginationQuery } from '../../common/decorators/pagination.decorator.ts';
+import type { PageDto } from '../../common/dto/page.dto.ts';
+import { ResponsePaging } from '../../shared/response/decorators/response.decorator.ts';
 import { UserEntity } from '../user/user.entity.ts';
 import { CreatePostDto } from './dtos/create-post.dto.ts';
 import { PostDto } from './dtos/post.dto.ts';
@@ -51,11 +50,11 @@ export class PostController {
   }
 
   @Get()
-  @Auth({ roles: [RoleType.USER], jwtAccessToken: true })
-  @UseLanguageInterceptor()
-  @ApiPageResponse({ type: PostDto })
+  @Auth({ roles: [RoleType.ADMIN, RoleType.USER], jwtAccessToken: true })
+  @ResponsePaging({ type: PostDto })
   async getPosts(
-    @Query() postsPageOptionsDto: PostPageOptionsDto,
+    @PaginationQuery({ availableSearch: ['title', 'description'] })
+    postsPageOptionsDto: PostPageOptionsDto,
   ): Promise<PageDto<PostDto>> {
     return this.postService.getAllPost(postsPageOptionsDto);
   }

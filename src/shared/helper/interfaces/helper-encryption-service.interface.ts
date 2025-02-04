@@ -22,5 +22,5 @@ export interface IHelperEncryptionService {
   aes256Compare(aes1: string, aes2: string): boolean;
   jwtEncrypt(payload: Record<string, any>, options: IHelperJwtOptions): string;
   jwtDecrypt<T>(token: string): T;
-  jwtVerify(token: string, options: IHelperJwtVerifyOptions): boolean;
+  jwtVerify<T>(token: string, options: IHelperJwtVerifyOptions): Promise<T>;
 }

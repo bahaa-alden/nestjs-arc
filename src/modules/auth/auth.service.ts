@@ -8,14 +8,13 @@ import {
   UnprocessableEntityException,
 } from '@nestjs/common';
 import { randomStringGenerator } from '@nestjs/common/utils/random-string-generator.util.js';
-import { JwtService } from '@nestjs/jwt';
-import bcrypt from 'bcrypt';
 import { plainToClass } from 'class-transformer';
 import ms from 'ms';
 
 import { RoleType } from '../../common/constants/role-type.ts';
 import { IFile } from '../../common/interfaces/IFile.ts';
-import { validateHash } from '../../common/utils.ts';
+import { HelperEncryptionService } from '../../shared/helper/services/helper-encryption.service.ts';
+import { HelperHashService } from '../../shared/helper/services/helper-hash.service.ts';
 import { MailService } from '../../shared/mail/mail.service.ts';
 import { ApiConfigService } from '../../shared/services/api-config.service.ts';
 import { Reference } from '../../types.ts';
@@ -35,11 +34,12 @@ import { IJwtRefreshPayloadType } from './strategies/types/jwt-refresh-payload.t
 @Injectable()
 export class AuthService {
   constructor(
-    private jwtService: JwtService,
+    private helperEncryptionService: HelperEncryptionService,
     private usersService: UserService,
     private sessionService: SessionService,
     private mailService: MailService,
     private config: ApiConfigService,
+    private helperHashService: HelperHashService,
   ) {}
 
   async validateLogin(loginDto: AuthEmailLoginDto): Promise<LoginResponseDto> {
@@ -55,7 +55,7 @@ export class AuthService {
       throw new UnprocessableEntityException('incorrect email or password');
     }
 
-    const isValidPassword = await validateHash(
+    const isValidPassword = this.helperHashService.bcryptCompare(
       loginDto.password,
       user.password,
     );
@@ -99,13 +99,13 @@ export class AuthService {
   ): Promise<void> {
     const user = await this.usersService.createUser(dto, file);
 
-    const hash = await this.jwtService.signAsync(
+    const hash = this.helperEncryptionService.jwtEncrypt(
       {
         confirmEmailUserId: user.id,
       },
       {
-        secret: this.config.authConfig.confirmEmailSecret,
-        expiresIn: this.config.authConfig.confirmEmailExpires,
+        secretKey: this.config.authConfig.confirmEmailSecret,
+        expiredIn: this.config.authConfig.confirmEmailExpires,
       },
     );
 
@@ -121,10 +121,10 @@ export class AuthService {
     let userId: UserDto['id'];
 
     try {
-      const jwtData = await this.jwtService.verifyAsync<{
+      const jwtData = await this.helperEncryptionService.jwtVerify<{
         confirmEmailUserId: UserEntity['id'];
       }>(hash, {
-        secret: this.config.authConfig.confirmEmailSecret,
+        secretKey: this.config.authConfig.confirmEmailSecret,
       });
 
       userId = jwtData.confirmEmailUserId;
@@ -153,11 +153,11 @@ export class AuthService {
     let userNewEmail: UserEntity['email'];
 
     try {
-      const jwtData = await this.jwtService.verifyAsync<{
+      const jwtData = await this.helperEncryptionService.jwtVerify<{
         confirmEmailUserId: UserEntity['id'];
         userNewEmail: UserEntity['email'];
       }>(hash, {
-        secret: this.config.authConfig.confirmEmailSecret,
+        secretKey: this.config.authConfig.confirmEmailSecret,
       });
 
       userId = jwtData.confirmEmailUserId;
@@ -202,13 +202,13 @@ export class AuthService {
 
     const tokenExpires = Date.now() + Number(ms(tokenExpiresIn));
 
-    const hash = await this.jwtService.signAsync(
+    const hash = this.helperEncryptionService.jwtEncrypt(
       {
         forgotUserId: user.id,
       },
       {
-        secret: this.config.authConfig.forgotSecret,
-        expiresIn: tokenExpiresIn,
+        secretKey: this.config.authConfig.forgotSecret,
+        expiredIn: tokenExpiresIn,
       },
     );
 
@@ -225,10 +225,10 @@ export class AuthService {
     let userId: UserDto['id'];
 
     try {
-      const jwtData = await this.jwtService.verifyAsync<{
+      const jwtData = await this.helperEncryptionService.jwtVerify<{
         forgotUserId: UserDto['id'];
       }>(hash, {
-        secret: this.config.authConfig.forgotSecret,
+        secretKey: this.config.authConfig.forgotSecret,
       });
 
       userId = jwtData.forgotUserId;
@@ -297,7 +297,7 @@ export class AuthService {
         });
       }
 
-      const isValidOldPassword = await bcrypt.compare(
+      const isValidOldPassword = this.helperHashService.bcryptCompare(
         userDto.oldPassword,
         currentUser.password,
       );
@@ -331,14 +331,14 @@ export class AuthService {
         });
       }
 
-      const hash = await this.jwtService.signAsync(
+      const hash = this.helperEncryptionService.jwtEncrypt(
         {
           confirmEmailUserId: currentUser.id,
           userNewEmail: userDto.email,
         },
         {
-          secret: this.config.authConfig.confirmEmailSecret,
-          expiresIn: this.config.authConfig.confirmEmailExpires,
+          secretKey: this.config.authConfig.confirmEmailSecret,
+          expiredIn: this.config.authConfig.confirmEmailExpires,
         },
       );
 
@@ -418,25 +418,25 @@ export class AuthService {
     const tokenExpires = Date.now() + ms(tokenExpiresIn);
 
     const [token, refreshToken] = await Promise.all([
-      this.jwtService.signAsync(
+      this.helperEncryptionService.jwtEncrypt(
         {
           id: data.id,
           role: data.role,
           sessionId: data.sessionId,
         },
         {
-          secret: this.config.authConfig.authSecret,
-          expiresIn: tokenExpiresIn,
+          secretKey: this.config.authConfig.authSecret,
+          expiredIn: tokenExpiresIn,
         },
       ),
-      this.jwtService.signAsync(
+      this.helperEncryptionService.jwtEncrypt(
         {
           sessionId: data.sessionId,
           hash: data.hash,
         },
         {
-          secret: this.config.authConfig.refreshSecret,
-          expiresIn: this.config.authConfig.refreshExpires,
+          secretKey: this.config.authConfig.refreshSecret,
+          expiredIn: this.config.authConfig.refreshExpires,
         },
       ),
     ]);

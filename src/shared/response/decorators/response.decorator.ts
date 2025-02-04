@@ -1,9 +1,9 @@
 import type { Type } from '@nestjs/common';
-import { applyDecorators, UseInterceptors } from '@nestjs/common';
+import { applyDecorators } from '@nestjs/common';
 
 import { ApiPageResponse } from '../../../common/decorators/api-page-response.decorator.ts';
 import { UseLanguageInterceptor } from '../../../common/interceptors/language-interceptor.service.ts';
-import { ResponsePagingInterceptor } from '../interceptors/response-paging.interceptor.ts';
+import { UseResponsePagingInterceptor } from '../interceptors/response-paging.interceptor.ts';
 
 export function ResponsePaging(options: {
   type: Type;
@@ -15,7 +15,7 @@ export function ResponsePaging(options: {
       type: options.type,
     }),
     UseLanguageInterceptor(),
-    UseInterceptors(ResponsePagingInterceptor),
+    UseResponsePagingInterceptor(),
   ];
 
   return applyDecorators(...decorators);

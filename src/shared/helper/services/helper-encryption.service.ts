@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Injectable, Logger } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import cryptoJs from 'crypto-js';
@@ -57,7 +58,7 @@ export class HelperEncryptionService implements IHelperEncryptionService {
       iv: cIv,
     });
 
-    return JSON.parse(cipher.toString(cryptoJs.enc.Utf8));
+    return JSON.parse(cipher.toString(cryptoJs.enc.Utf8)) as T;
   }
 
   aes256Compare(aes1: string, aes2: string): boolean {
@@ -69,9 +70,9 @@ export class HelperEncryptionService implements IHelperEncryptionService {
       secret: options.secretKey,
       expiresIn: options.expiredIn,
       notBefore: options.notBefore ?? 0,
-      audience: options.audience,
-      issuer: options.issuer,
-      subject: options.subject,
+      audience: options.audience ?? '',
+      issuer: options.issuer ?? '',
+      subject: options.subject ?? '',
     });
   }
 
@@ -79,21 +80,24 @@ export class HelperEncryptionService implements IHelperEncryptionService {
     return this.jwtService.decode<T>(token);
   }
 
-  jwtVerify(token: string, options: IHelperJwtVerifyOptions): boolean {
+  async jwtVerify<T>(
+    token: string,
+    options: IHelperJwtVerifyOptions,
+  ): Promise<T> {
     try {
-      this.jwtService.verify(token, {
+      const result = (await this.jwtService.verifyAsync(token, {
         secret: options.secretKey,
-        audience: options.audience,
-        issuer: options.issuer,
-        subject: options.subject,
+        audience: options.audience ?? '',
+        issuer: options.issuer ?? '',
+        subject: options.subject ?? '',
         ignoreExpiration: options.ignoreExpiration ?? false,
-      });
+      })) as T;
 
-      return true;
+      return result;
     } catch (error: unknown) {
       this.logger.error(error);
 
-      return false;
+      throw error;
     }
   }
 }
