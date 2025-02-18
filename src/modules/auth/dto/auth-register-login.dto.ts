@@ -2,6 +2,7 @@ import {
   EmailField,
   PasswordField,
   PhoneFieldOptional,
+  PhotoFieldOptional,
   StringField,
 } from '../../../common/decorators/field.decorators.ts';
 import { IsUnique } from '../../../shared/request/validations/request-unique.validation.ts';
@@ -23,4 +24,7 @@ export class AuthRegisterLoginDto {
 
   @PhoneFieldOptional()
   phone?: string;
+
+  @PhotoFieldOptional()
+  avatar?: string;
 }

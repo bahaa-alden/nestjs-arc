@@ -7,6 +7,7 @@ import { HelperDateService } from './services/helper-date.service.ts';
 import { HelperEncryptionService } from './services/helper-encryption.service.ts';
 import { HelperHashService } from './services/helper-hash.service.ts';
 import { HelperNumberService } from './services/helper-number.service.ts';
+import { HelperPhotoService } from './services/helper-photo.service.ts';
 import { HelperStringService } from './services/helper-string.service.ts';
 
 @Global()
@@ -22,6 +23,7 @@ export class HelperModule {
         HelperHashService,
         HelperNumberService,
         HelperStringService,
+        HelperPhotoService,
       ],
       exports: [
         HelperArrayService,
@@ -30,6 +32,7 @@ export class HelperModule {
         HelperHashService,
         HelperNumberService,
         HelperStringService,
+        HelperPhotoService,
       ],
       controllers: [],
       imports: [

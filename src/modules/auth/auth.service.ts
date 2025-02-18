@@ -12,12 +12,10 @@ import { plainToClass } from 'class-transformer';
 import ms from 'ms';
 
 import { RoleType } from '../../common/constants/role-type.ts';
-import { IFile } from '../../common/interfaces/IFile.ts';
 import { HelperEncryptionService } from '../../shared/helper/services/helper-encryption.service.ts';
 import { HelperHashService } from '../../shared/helper/services/helper-hash.service.ts';
 import { MailService } from '../../shared/mail/mail.service.ts';
 import { ApiConfigService } from '../../shared/services/api-config.service.ts';
-import { Reference } from '../../types.ts';
 import { SessionDto } from '../session/dtos/session.dto.ts';
 import { SessionService } from '../session/session.service.ts';
 import { CreateSettingsDto } from '../user/dtos/create-settings.dto.ts';
@@ -93,11 +91,8 @@ export class AuthService {
     };
   }
 
-  async register(
-    dto: AuthRegisterLoginDto,
-    file?: Reference<IFile>,
-  ): Promise<void> {
-    const user = await this.usersService.createUser(dto, file);
+  async register(dto: AuthRegisterLoginDto): Promise<void> {
+    const user = await this.usersService.createUser(dto);
 
     const hash = this.helperEncryptionService.jwtEncrypt(
       {

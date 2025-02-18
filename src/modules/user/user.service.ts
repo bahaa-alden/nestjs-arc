@@ -8,12 +8,8 @@ import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity
 import { Transactional } from 'typeorm-transactional';
 
 import type { PageDto } from '../../common/dto/page.dto.ts';
-import { FileNotImageException } from '../../common/exceptions/file-not-image.exception.ts';
 import { UserNotFoundException } from '../../common/exceptions/user-not-found.exception.ts';
-import type { IFile } from '../../common/interfaces/IFile.ts';
 import { CloudinaryService } from '../../shared/services/cloudinary.service.ts';
-import { ValidatorService } from '../../shared/services/validator.service.ts';
-import type { Reference } from '../../types.ts';
 import { AuthRegisterLoginDto } from '../auth/dto/auth-register-login.dto.ts';
 import { CreateSettingsCommand } from './commands/create-settings.command.ts';
 import { UpdateSettingsCommand } from './commands/update-settings.command.ts';
@@ -28,7 +24,6 @@ export class UserService {
   constructor(
     @InjectRepository(UserEntity)
     private userRepository: Repository<UserEntity>,
-    private validatorService: ValidatorService,
     private cloudinaryService: CloudinaryService,
     private commandBus: CommandBus,
   ) {}
@@ -63,18 +58,13 @@ export class UserService {
   }
 
   @Transactional()
-  async createUser(
-    userRegisterDto: AuthRegisterLoginDto,
-    file?: Reference<IFile>,
-  ): Promise<UserEntity> {
+  async createUser(userRegisterDto: AuthRegisterLoginDto): Promise<UserEntity> {
     const user = this.userRepository.create(userRegisterDto);
 
-    if (file && !this.validatorService.isImage(file.mimetype)) {
-      throw new FileNotImageException();
-    }
-
-    if (file) {
-      user.avatar = await this.cloudinaryService.uploadSinglePhoto(file.buffer);
+    if (userRegisterDto.avatar) {
+      user.avatar = await this.cloudinaryService.uploadSinglePhotoFromPath(
+        userRegisterDto.avatar,
+      );
     }
 
     await this.userRepository.save(user);

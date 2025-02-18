@@ -1,10 +1,12 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { Injectable } from '@nestjs/common';
 import _ from 'lodash';
 import type { TranslateOptions } from 'nestjs-i18n';
 import { I18nService } from 'nestjs-i18n';
 
-import { AbstractDto } from '../../common/dto/abstract.dto.ts';
 import { STATIC_TRANSLATION_DECORATOR_KEY } from '../../common/decorators/translate.decorator.ts';
+import { AbstractDto } from '../../common/dto/abstract.dto.ts';
 import type { ITranslationDecoratorInterface } from '../../common/interfaces/ITranslationDecoratorInterface.ts';
 import { ContextProvider } from '../../providers/context.provider.ts';
 
@@ -23,9 +25,12 @@ export class TranslationService {
     await Promise.all(
       _.map(dto, (value, key) => {
         if (_.isString(value)) {
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
           const translateDec: ITranslationDecoratorInterface | undefined =
-            Reflect.getMetadata(STATIC_TRANSLATION_DECORATOR_KEY, dto, key);
+            Reflect.getMetadata(
+              STATIC_TRANSLATION_DECORATOR_KEY,
+              Object.getPrototypeOf(dto),
+              key,
+            );
 
           if (translateDec) {
             const k = key as keyof T;
@@ -33,8 +38,6 @@ export class TranslationService {
               `${translateDec.translationKey ?? key}.${value}`,
             ) as T[keyof T];
           }
-
-          return;
         }
 
         if (value instanceof AbstractDto) {

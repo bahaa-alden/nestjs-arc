@@ -14,6 +14,7 @@ export class LessThanEqualOtherPropertyConstraint
   validate(value: string, args: any): boolean {
     const [property] = args.constraints;
     const relatedValue = args.object[property];
+
     return value <= relatedValue;
   }
 }
@@ -26,7 +27,7 @@ export function LessThanEqualOtherProperty(
     registerDecorator({
       name: 'LessThanEqualOtherProperty',
       target: object.constructor,
-      propertyName: propertyName,
+      propertyName,
       options: validationOptions,
       constraints: [property],
       validator: LessThanEqualOtherPropertyConstraint,
@@ -42,6 +43,7 @@ export class LessThanOtherPropertyConstraint
   validate(value: string, args: any): boolean {
     const [property] = args.constraints;
     const relatedValue = args.object[property];
+
     return value < relatedValue;
   }
 }
@@ -54,7 +56,7 @@ export function LessThanOtherProperty(
     registerDecorator({
       name: 'LessThanOtherProperty',
       target: object.constructor,
-      propertyName: propertyName,
+      propertyName,
       options: validationOptions,
       constraints: [property],
       validator: LessThanOtherPropertyConstraint,

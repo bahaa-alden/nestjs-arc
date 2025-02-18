@@ -7,16 +7,12 @@ import {
   HttpStatus,
   Patch,
   Post,
-  UploadedFile,
 } from '@nestjs/common';
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
 import { RoleType } from '../../common/constants/role-type.ts';
 import { AuthUser } from '../../common/decorators/auth-user.decorator.ts';
 import { Auth } from '../../common/decorators/http.decorators.ts';
-import { ApiFile } from '../../common/decorators/swagger.schema.ts';
-import { IFile } from '../../common/interfaces/IFile.ts';
-import type { Reference } from '../../types.ts';
 import { UserDto } from '../user/dtos/user.dto.ts';
 import { AuthService } from './auth.service.ts';
 import { AuthConfirmEmailDto } from './dto/auth-confirm-email.dto.ts';
@@ -46,12 +42,8 @@ export class AuthController {
 
   @Post('email/register')
   @HttpCode(HttpStatus.NO_CONTENT)
-  @ApiFile({ name: 'avatar' })
-  async register(
-    @Body() createUserDto: AuthRegisterLoginDto,
-    @UploadedFile() file?: Reference<IFile>,
-  ): Promise<void> {
-    return this.authService.register(createUserDto, file);
+  async register(@Body() createUserDto: AuthRegisterLoginDto): Promise<void> {
+    return this.authService.register(createUserDto);
   }
 
   @Post('email/confirm')

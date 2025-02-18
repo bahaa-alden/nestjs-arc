@@ -17,9 +17,11 @@ import {
 import { DataSource } from 'typeorm';
 import { addTransactionalDataSource } from 'typeorm-transactional';
 
+import { PhotoCleanupModule } from './jobs/photo-cleanup/photo-cleanup.module.ts';
 import { ApiKeyModule } from './modules/api-key/api-key.module.ts';
 import { AuthModule } from './modules/auth/auth.module.ts';
 import { HealthCheckerModule } from './modules/health-checker/health-checker.module.ts';
+import { PhotosModule } from './modules/photos/photos.module.ts';
 import { PostModule } from './modules/post/post.module.ts';
 import { SessionModule } from './modules/session/session.module.ts';
 import { UserModule } from './modules/user/user.module.ts';
@@ -32,6 +34,8 @@ import { SharedModule } from './shared/shared.module.ts';
     UserModule,
     PostModule,
     SessionModule,
+    PhotosModule,
+    PhotoCleanupModule,
     ApiKeyModule.forRoot(),
     ClsModule.forRoot({
       global: true,

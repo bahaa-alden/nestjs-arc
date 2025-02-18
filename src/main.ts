@@ -1,3 +1,7 @@
+import 'reflect-metadata';
+
+import path from 'node:path';
+
 import { ClassSerializerInterceptor } from '@nestjs/common';
 import { HttpAdapterHost, NestFactory, Reflector } from '@nestjs/core';
 import { Transport } from '@nestjs/microservices';
@@ -33,7 +37,9 @@ export async function bootstrap(): Promise<NestExpressApplication> {
 
   useContainer(app.select(AppModule), { fallbackOnErrors: true });
   app.enable('trust proxy'); // only if you're behind a reverse proxy (Heroku, Bluemix, AWS ELB, Nginx, etc)
-  app.use(helmet());
+  app.use(
+    helmet({ xssFilter: true, contentSecurityPolicy: true, xPoweredBy: false }),
+  );
   // app.setGlobalPrefix('/api'); use api as global prefix if you don't have subdomain
   app.use(compression());
   app.use(morgan('combined'));
@@ -56,6 +62,11 @@ export async function bootstrap(): Promise<NestExpressApplication> {
   );
 
   app.useGlobalPipes(new MainValidationPipe());
+
+  app.useStaticAssets(path.join(import.meta.dirname, '..', 'public'), {
+    extensions: ['jpg', 'css', 'png', 'mp3'],
+    index: false,
+  });
 
   const configService = app.select(SharedModule).get(ApiConfigService);
 

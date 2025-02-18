@@ -15,7 +15,7 @@ export class CloudinaryService {
     });
   }
 
-  // Convert buffer to readable stream
+  // Using buffer
   private bufferToStream(buffer: Buffer): Readable {
     const stream = new Readable({
       read() {
@@ -69,6 +69,37 @@ export class CloudinaryService {
     return results.map((res) => res?.url);
   }
 
+  //Using Path
+  async uploadPhotoFromPath(
+    path: string,
+  ): Promise<cloudinary.UploadApiResponse> {
+    try {
+      const result = await cloudinary.v2.uploader.upload(path, {
+        folder: 'Users',
+      });
+
+      return result;
+    } catch (error: any) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      throw new BadRequestException(`Upload failed: ${error.message}`);
+    }
+  }
+
+  async uploadSinglePhotoFromPath(path: string) {
+    const result = await this.uploadPhotoFromPath(path);
+
+    return result.url;
+  }
+
+  async uploadMultiplePhotosFromPath(paths: string[]) {
+    const results = await Promise.all(
+      paths.map((e) => this.uploadPhotoFromPath(e)),
+    );
+
+    return results.map((res) => res.url);
+  }
+
+  //Remove Images
   async removePhoto(publicId: string) {
     await cloudinary.v2.uploader.destroy(publicId, {
       resource_type: 'image',

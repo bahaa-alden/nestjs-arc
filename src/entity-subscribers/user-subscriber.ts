@@ -1,3 +1,4 @@
+import { Injectable } from '@nestjs/common';
 import type {
   EntitySubscriberInterface,
   InsertEvent,
@@ -7,9 +8,13 @@ import { EventSubscriber } from 'typeorm';
 
 import { UserEntity } from '../modules/user/user.entity.ts';
 import { HelperHashService } from '../shared/helper/services/helper-hash.service.ts';
+
 @EventSubscriber()
+@Injectable()
 export class UserSubscriber implements EntitySubscriberInterface<UserEntity> {
-  constructor(private helperService: HelperHashService) {}
+  constructor(private helperService: HelperHashService) {
+    this.helperService = new HelperHashService();
+  }
 
   listenTo(): typeof UserEntity {
     return UserEntity;

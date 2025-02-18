@@ -1,3 +1,5 @@
+import { existsSync } from 'node:fs';
+
 import type { ValidationOptions } from 'class-validator';
 import {
   IsPhoneNumber as isPhoneNumber,
@@ -55,6 +57,26 @@ export function IsTmpKey(
       },
     });
   };
+}
+
+export function IsPhoto(
+  validationOptions?: ValidationOptions,
+): PropertyDecorator {
+  return function (object: object, propertyName: string) {
+    registerDecorator({
+      target: object.constructor,
+      propertyName,
+      options: validationOptions,
+      validator: {
+        validate(value: string) {
+          return Boolean(existsSync(value));
+        },
+        defaultMessage() {
+          return 'photo not found';
+        },
+      },
+    });
+  } as PropertyDecorator;
 }
 
 export function IsUndefinable(options?: ValidationOptions): PropertyDecorator {

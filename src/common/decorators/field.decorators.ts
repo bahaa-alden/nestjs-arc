@@ -1,7 +1,7 @@
 import { applyDecorators } from '@nestjs/common';
 import type { ApiPropertyOptions } from '@nestjs/swagger';
 import { ApiProperty } from '@nestjs/swagger';
-import { Type } from 'class-transformer';
+import { Transform, Type } from 'class-transformer';
 import {
   ArrayMaxSize,
   ArrayMinSize,
@@ -24,8 +24,9 @@ import {
   ValidateNested,
 } from 'class-validator';
 
-import { supportedLanguageCount } from '../constants/language-code.ts';
+import { HelperPhotoService } from '../../shared/helper/services/helper-photo.service.ts';
 import type { Constructor } from '../../types.ts';
+import { supportedLanguageCount } from '../constants/language-code.ts';
 import { ApiEnumProperty, ApiUUIDProperty } from './property.decorators.ts';
 import {
   PhoneNumberSerializer,
@@ -38,6 +39,7 @@ import {
   IsNullable,
   IsPassword,
   IsPhoneNumber,
+  IsPhoto,
   IsTmpKey as IsTemporaryKey,
   IsUndefinable,
 } from './validator.decorators.ts';
@@ -515,4 +517,31 @@ export function DateFieldOptional(
     IsUndefinable(),
     DateField({ ...options, required: false }),
   );
+}
+
+export function PhotoField(
+  options: Omit<ApiPropertyOptions, 'type' | 'required'> & IFieldOptions = {},
+): PropertyDecorator {
+  const helperPhotoService = new HelperPhotoService();
+
+  const decorators = [
+    StringField(options),
+    Transform(({ value }: { value: string }) =>
+      helperPhotoService.getPhotoPath(value),
+    ),
+    IsPhoto(options),
+  ];
+
+  return applyDecorators(...decorators);
+}
+
+export function PhotoFieldOptional(
+  options: Omit<ApiPropertyOptions, 'type'> & IFieldOptions = {},
+): PropertyDecorator {
+  const decorators = [
+    IsUndefinable(),
+    PhotoField({ required: false, ...options }),
+  ];
+
+  return applyDecorators(...decorators);
 }
