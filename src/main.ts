@@ -1,3 +1,4 @@
+/* eslint-disable sonarjs/void-use */
 import 'reflect-metadata';
 
 import path from 'node:path';
@@ -35,6 +36,7 @@ export async function bootstrap(): Promise<NestExpressApplication> {
   // logger
   app.useLogger(app.get(PinoLogger));
 
+  const logger = app.get(PinoLogger);
   useContainer(app.select(AppModule), { fallbackOnErrors: true });
   app.enable('trust proxy'); // only if you're behind a reverse proxy (Heroku, Bluemix, AWS ELB, Nginx, etc)
   app.use(
@@ -98,12 +100,12 @@ export async function bootstrap(): Promise<NestExpressApplication> {
   const port = configService.appConfig.port;
   await app.listen(port);
 
-  console.info(`server running on ${await app.getUrl()}`);
-  console.info(
+  logger.log(`server running on ${await app.getUrl()}`);
+  logger.log(
     `Documentation: http://localhost:${process.env.PORT}/documentation`,
   );
 
   return app;
 }
 
-void bootstrap();
+void (await bootstrap());

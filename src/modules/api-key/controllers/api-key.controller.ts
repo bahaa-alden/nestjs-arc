@@ -36,7 +36,7 @@ import { ApiKeyEntity } from '../repository/entities/api-key.entity.ts';
 import { ApiKeyService } from '../services/api-key.service.ts';
 
 @ApiTags('apiKey')
-@Controller('api-key')
+@Controller({ path: 'api-key', version: '1' })
 export class ApiKeyAdminController {
   constructor(private readonly apiKeyService: ApiKeyService) {}
 

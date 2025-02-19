@@ -14,7 +14,7 @@ import { UsersPageOptionsDto } from './dtos/users-page-options.dto.ts';
 import { UserEntity } from './user.entity.ts';
 import { UserService } from './user.service.ts';
 
-@Controller('users')
+@Controller({ path: 'users', version: '1' })
 @ApiTags('users')
 export class UserController {
   constructor(
@@ -37,7 +37,7 @@ export class UserController {
   }
 
   @Get()
-  // @Auth({ roles: [RoleType.USER], jwtAccessToken: true })
+  @Auth({ roles: [RoleType.USER], jwtAccessToken: true })
   @ResponsePaging({
     description: 'Get users list',
     type: UserDto,

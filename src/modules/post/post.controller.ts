@@ -28,7 +28,7 @@ import { PostPageOptionsDto } from './dtos/post-page-options.dto.ts';
 import { UpdatePostDto } from './dtos/update-post.dto.ts';
 import { PostService } from './post.service.ts';
 
-@Controller('posts')
+@Controller({ path: 'posts', version: '1' })
 @ApiTags('posts')
 export class PostController {
   constructor(private postService: PostService) {}

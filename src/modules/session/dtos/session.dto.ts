@@ -20,6 +20,5 @@ export class SessionDto extends AbstractDto {
     this.userId = session.userId;
     this.hash = session.hash;
     this.user = session.user.toDto();
-    console.log(this);
   }
 }
